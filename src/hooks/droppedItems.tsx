@@ -1,1 +1,0 @@
-// manages state, calls service, calls repo, component only talks to this thing
