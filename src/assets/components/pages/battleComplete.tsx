@@ -1,22 +1,17 @@
-import { useState } from "react";
 import './battleComplete.css'
+import { useDroppedItems } from "../../../hooks/useDroppedItems";
 
 function BattleComplete() {
     // placeholder data
 
     const experienceGained = 150
     const goldEarned = 312980
-    const [itemsDropped, setItemsDropped] = useState([
-        {id: 1, value: "Minor Health Potion"},
-        {id: 2, value: "Broken Straight Sword"},
-        {id: 3, value: "A rusted nail"},
-        {id: 4, value: "An all-seeing eyeball"}
-    ])
-
-    const [itemsDiscarded, setItemsDiscarded] = useState<{id: number, value: string}[]>([])
-    const[selectedItems, setSelectedItems] = useState<{id: number, value: string}[]>([])
-    const[discardConfirmation, setDiscardConfirmation] = useState(false)
-    const[itemsKept, setItemsKept] = useState(false)
+        const { itemsDiscarded, setItemsDiscarded, 
+            selectedItems, setSelectedItems, 
+            discardConfirmation, setDiscardConfirmation,
+            itemsKept, setItemsKept,
+            itemsDropped, setItemsDropped
+        } = useDroppedItems();
 
     const isItemSelected = (itemId: number) => {
         return selectedItems.filter(selectedItem => selectedItem.id === itemId).length > 0
@@ -47,7 +42,7 @@ function BattleComplete() {
                                             }
                                         }}
                                     >
-                                        {items.value}
+                                        {items.name}
                                     </li>
                                 )
                             })
@@ -70,7 +65,7 @@ function BattleComplete() {
                                 {selectedItems.map((itemsDiscard) => {
                                     return(
                                         <li key = {itemsDiscard.id}>
-                                            {itemsDiscard.value}
+                                            {itemsDiscard.name}
                                         </li>
                                     );
                                 })}
