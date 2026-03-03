@@ -1,13 +1,9 @@
 import { useState } from "react";
 import "./SavedLogins.css";
+import type { User } from "../../../types/User";
 
-// Type definition for saved users
-export interface SavedUser {
-  id: string;
-  username: string;
-  email: string;
-  password: string;
-}
+// Re-export the project-wide `User` type as `SavedUser` for compatibility
+export type SavedUser = User;
 
 interface SavedLoginsProps {
   savedUsers: SavedUser[];
