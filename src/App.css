@@ -19,13 +19,21 @@ main.container {
 }
 
 .game-viewport {
-  width: 1280px;
-  height: 720px;
-  max-width: 100%;
+  /* keep the 16:9 design resolution but allow the container to shrink
+     and scale when the browser window is smaller. using aspect-ratio and
+     max-width keeps the frame at most 1280×720 while letting it flex
+     responsively. children should size themselves to 100% of this box. */
+  width: 100%;
+  max-width: 1280px;
+  aspect-ratio: 16 / 9;
   max-height: 100%;
   overflow: hidden;
   border: 4px solid #ffffff;
   box-sizing: border-box;
+  /* center any fixed‑size content in case pages still use explicit pixels */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 footer {
