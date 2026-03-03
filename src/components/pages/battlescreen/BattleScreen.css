@@ -1,0 +1,129 @@
+.battle-screen {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #2a2a2a;
+}
+
+/* Top battle area */
+.battle-area {
+    flex: 1;
+    background: linear-gradient(to bottom, #8b6f47, #d4a574);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+}
+
+.enemy-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.enemy-placeholder {
+    width: 150px;
+    height: 150px;
+    background: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #333;
+    font-size: 48px;
+    color: white;
+}
+
+.allies-container {
+    flex: 1;
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.ally-sprite {
+    width: 60px;
+    height: 80px;
+    background: #888;
+    border: 2px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+/* Bottom UI panel */
+.battle-ui {
+    height: 200px;
+    background: #1a1a1a;
+    border-top: 4px solid #666;
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+}
+
+/* Move buttons on left */
+.moves-panel {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.move-button {
+    flex: 1;
+    background: #3a3a3a;
+    color: white;
+    border: 2px solid #666;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.move-button:hover {
+    background: #4a4a4a;
+}
+
+/* Ally icons on right */
+.ally-icons-panel {
+    width: 30%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.ally-icon {
+    gap: 10px;
+    background: #2a2a2a;
+    padding: 8px;
+    border: 2px solid #666;
+    border-radius: 4px;
+}
+
+.ally-circle {
+    width: 60px;
+    height: 60px;
+    background: #555;
+    border: 2px solid #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: white;
+}
+
+.ally-name {
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.health-bar {
+    width: 80px;
+    height: 12px;
+    background: #333;
+    border: 1px solid #666;
+    margin-top: 4px;
+}
