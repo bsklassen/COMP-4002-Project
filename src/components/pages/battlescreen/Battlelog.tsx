@@ -1,13 +1,20 @@
-import "./BattleScreen.css";
+import type { BattleLogMessage } from "../../../types/BattleLogMessage";
+import "./BattleScreen.css"
 
-interface LogMessage {
-    id: number;
-    type: 'system' | 'ally' | 'enemy';
-    text: string;
-}
+
+/**
+ * BattleLog Component
+ * 
+ * This component uses the hook-service-repository architecture:
+ * - Receives messages from the useBattleLog hook (presentation logic)
+ * - Displays messages using the BattleLogMessage type
+ * - Pure presentation component with no business logic
+ * 
+ * The hook provides the data, this component only renders it.
+ */
 
 interface BattleLogProps {
-    messages: LogMessage[];
+    messages: BattleLogMessage[];
 }
 
 function BattleLog({ messages }: BattleLogProps) {

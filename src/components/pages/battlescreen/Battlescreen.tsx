@@ -1,58 +1,20 @@
-import { useState } from "react";
 import AllyIcon from "./AllyIcon";
 import BattleLog from "./Battlelog";
 import MovesPanel from "./MovesPanel";
+import { useBattleLog } from "../../../hooks/useBattleLog";
 import "./BattleScreen.css";
 
-export interface LogMessage {
-    id: number;
-    type: 'system' | 'ally' | 'enemy';
-    text: string;
-}
-
 function BattleScreen() {
-    const [battleLog, setBattleLog] = useState<LogMessage[]>([
-        { id: 1, type: 'system', text: 'Battle has begun!' }
-    ]);
-    const [messageId, setMessageId] = useState(2);
-
-    const addLogMessage = (type: 'system' | 'ally' | 'enemy', text: string) => {
-        const newMessage: LogMessage = {
-            id: messageId,
-            type,
-            text
-        };
-        setBattleLog(prev => [...prev, newMessage]);
-        setMessageId(prev => prev + 1);
-    };
-
-    const handleAttack = () => {
-        addLogMessage('ally', 'You strike the enemy with your sword!');
-        
-        // Simulate enemy response after a short delay
-        setTimeout(() => {
-            addLogMessage('enemy', 'The enemy takes 15 damage!');
-        }, 800);
-    };
-
-    const handleSkills = () => {
-        addLogMessage('ally', 'You cast Fireball on the enemy!');
-        
-        // Simulate enemy response after a short delay
-        setTimeout(() => {
-            addLogMessage('enemy', 'The enemy is engulfed in flames! 25 damage!');
-        }, 800);
-    };
-
-    const handleMovement = () => {
-        // Placeholder for movement functionality
-        addLogMessage('system', 'Movement option selected.');
-    };
-
-    const handleGuard = () => {
-        // Placeholder for guard functionality
-        addLogMessage('system', 'You raise your shield in defense.');
-    };
+    // Use the custom hook to get battle log state and actions
+    // Pass empty dependencies array - messages refresh on every action
+    const {
+        messages,
+        error,
+        handleAttack,
+        handleSkill,
+        handleMovement,
+        handleGuard
+    } = useBattleLog([]);
 
     return (
         <div className="battle-screen">
@@ -74,16 +36,22 @@ function BattleScreen() {
 
             {/* Bottom UI Panel */}
             <div className="battle-ui">
-                {/* Move Buttons */}
+                {/* Move Buttons - Pass handlers from the hook */}
                 <MovesPanel 
                     onAttack={handleAttack}
-                    onSkills={handleSkills}
+                    onSkills={handleSkill}
                     onMovement={handleMovement}
                     onGuard={handleGuard}
                 />
 
-                {/* Battle Log */}
-                <BattleLog messages={battleLog} />
+                {/* Battle Log - Pass messages from the hook, show error if present */}
+                {error ? (
+                    <div className="battle-log">
+                        <span className="error">Something went wrong: ({error})</span>
+                    </div>
+                ) : (
+                    <BattleLog messages={messages} />
+                )}
 
                 {/* Ally Icons */}
                 <div className="ally-icons-panel">
