@@ -1,21 +1,21 @@
 import { Router } from "express";
 import * as controller from "../controllers/authController.ts";
 import { validate } from "../middleware/validate.ts";
-import { z } from "zod";
+import Joi from "joi";
 
 const router = Router();
 
-const authPayloadSchema = z.object({
-  body: z.object({
-    username: z.string().min(1),
-    email: z.string().email(),
-    password: z.string().min(6),
+const authPayloadSchema = Joi.object({
+  body: Joi.object({
+    username: Joi.string().min(1).required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(6).required(),
   }),
 });
 
-const idParamSchema = z.object({
-  params: z.object({
-    id: z.string().min(1),
+const idParamSchema = Joi.object({
+  params: Joi.object({
+    id: Joi.string().min(1).required(),
   }),
 });
 
