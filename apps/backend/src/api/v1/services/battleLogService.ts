@@ -1,4 +1,4 @@
-// import { BattleLogMessage } from "@prisma/client";
+import { BattleLogMessage } from "@prisma/client";
 import * as battleLogRepository from "../repositories/battleLogRepository";
 
 // Get all messages - straight forward delegation to repository

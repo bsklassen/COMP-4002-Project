@@ -1,0 +1,23 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// BattleLogMessage table
+// Conforms to Third Normal Form:
+// - No repeating groups (1NF)
+// - All non-key attributes depend on the whole primary key (2NF)
+// - No transitive dependencies (3NF)
+model BattleLogMessage {
+  id        Int      @id @default(autoincrement())
+  type      String   // "system", "ally", or "enemy"
+  text      String
+  timestamp DateTime @default(now())
+}
