@@ -17,7 +17,7 @@
   "type": "commonjs",
   "description": "",
   "devDependencies": {
-    "concurrently": "^9.1.2",
+    "concurrently": "^9.2.1",
     "typescript": "^5.8.2"
   },
   "dependencies": {

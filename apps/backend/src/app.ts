@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express, { type ErrorRequestHandler } from "express";
 import authRoutes from "./api/v1/routes/authRoutes.ts";
 

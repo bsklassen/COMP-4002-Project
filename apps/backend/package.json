@@ -1,10 +1,11 @@
 {
   "name": "@complexicon/backend",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/server.ts",
+    "start": "ts-node-esm src/app.ts",
     "build": "tsc"
   },
   "keywords": [],
@@ -12,7 +13,7 @@
   "license": "ISC",
   "description": "",
   "prisma": {
-    "seed": "ts-node --transpile-only prisma/seed.ts"
+    "seed": "ts-node-esm --transpile-only prisma/seed.ts"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
@@ -29,6 +30,7 @@
     "@types/cors": "^2.8.17",
     "@types/morgan": "^1.9.9",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "joi": "^17.13.3",
     "morgan": "^1.10.0"

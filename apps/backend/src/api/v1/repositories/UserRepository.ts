@@ -1,35 +1,71 @@
 import type { User, NewUser } from "../types/User.ts";
 import { usersTestData } from "../data/usersTestData.ts";
+import prisma from "../../../../prisma/client.ts";
 
 class UserRepository {
-  private users: User[];
+  private seeded = false;
+  private useDatabase = Boolean(process.env.DATABASE_URL);
+  private users: User[] = [...usersTestData];
 
-  constructor() {
-    this.users = [...usersTestData];
+  private async ensureSeeded(): Promise<void> {
+    if (this.seeded) return;
+
+    if (!this.useDatabase) {
+      this.seeded = true;
+      return;
+    }
+
+    try {
+      const existingCount = await prisma.user.count();
+      if (existingCount === 0) {
+        await prisma.user.createMany({ data: usersTestData });
+      }
+    } catch {
+      this.useDatabase = false;
+    }
+
+    this.seeded = true;
   }
 
   async getAll(): Promise<User[]> {
-    return structuredClone(this.users);
+    await this.ensureSeeded();
+    if (!this.useDatabase) {
+      return structuredClone(this.users).sort((a, b) => a.username.localeCompare(b.username));
+    }
+    return prisma.user.findMany({ orderBy: { username: "asc" } });
   }
 
   async getById(id: string): Promise<User | null> {
-    const found = this.users.find(u => u.id === id) ?? null;
-    return found ? { ...found } : null;
+    await this.ensureSeeded();
+    if (!this.useDatabase) {
+      const found = this.users.find((u) => u.id === id) ?? null;
+      return found ? { ...found } : null;
+    }
+    return prisma.user.findUnique({ where: { id } });
   }
 
   async create(newUser: NewUser): Promise<User> {
-    const created: User = {
-      id: crypto.randomUUID?.() ?? `id_${Date.now()}`,
-      ...newUser,
-    };
-    this.users.push(created);
-    return { ...created };
+    await this.ensureSeeded();
+    if (!this.useDatabase) {
+      const created: User = {
+        id: crypto.randomUUID?.() ?? `id_${Date.now()}`,
+        ...newUser,
+      };
+      this.users.push(created);
+      return { ...created };
+    }
+    return prisma.user.create({ data: newUser });
   }
 
   async delete(id: string): Promise<boolean> {
-    const initialLength = this.users.length;
-    this.users = this.users.filter(u => u.id !== id);
-    return this.users.length < initialLength;
+    await this.ensureSeeded();
+    if (!this.useDatabase) {
+      const initialLength = this.users.length;
+      this.users = this.users.filter((u) => u.id !== id);
+      return this.users.length < initialLength;
+    }
+    const result = await prisma.user.deleteMany({ where: { id } });
+    return result.count > 0;
   }
 }
 
