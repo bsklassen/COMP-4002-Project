@@ -1,4 +1,3 @@
-
 import type { Item } from "../types/items"
 
 let items: Item[]= [
@@ -18,6 +17,6 @@ export function getItems(): Item[]{
     return items;
 }
 
-export function removeItem(id: number): void {
+export function removeItemById(id: number): void {
     items = items.filter(item => item.id != id);
 }

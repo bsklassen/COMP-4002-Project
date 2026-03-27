@@ -1,8 +1,6 @@
-import { getItems, removeItemById } from "../data/itemData"
 import { Request, Response, NextFunction } from "express";
 import { successResponse } from "../models/responseModel";
 import * as itemService from "../services/itemService"
-
 
 export const getDroppedItems = async(
     _req: Request,
@@ -18,7 +16,6 @@ export const getDroppedItems = async(
         next(error);
     }
 }
-
 
 export const discardItems = async (
     req: Request,
