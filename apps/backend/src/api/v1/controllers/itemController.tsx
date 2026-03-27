@@ -1,14 +1,36 @@
 import { getItems, removeItemById } from "../data/itemData"
+import { Request, Response, NextFunction } from "express";
+import { successResponse } from "../models/responseModel";
+import * as itemService from "../services/itemService"
 
 
-// Business logic
-
-import type { Item } from "../types/items"
-import * as itemRepository from "../repositories/itemRepository"
-
-export function droppedItemRandomizer(): Item[]{
-    const items = itemRepository.getItems()
-    const droppedItemAmount = Math.random() <0.5 ? 2 : 3;  // will decide to drop either 2 or 3 items
-    const randomItems = [...items].sort(() => Math.random() - 0.5);
-    return randomItems.slice(0, droppedItemAmount);
+export const getDroppedItems = async(
+    _req: Request,
+    res: Response, 
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const items = await itemService.getDroppedItems();
+        res.status(200).json(
+            successResponse(items, "Dropped item retrieved.")
+        );
+    } catch(error) {
+        next(error);
+    }
 }
+
+
+export const discardItems = async (
+    req: Request,
+    res: Response, 
+    next: NextFunction
+): Promise<void> => {
+    try {
+        await itemService.discardItems(req.body.itemIds);
+        res.status(200).json(
+            successResponse(null, "items discarded successfully")
+        );
+    } catch(error) {
+        next(error);
+    }
+};

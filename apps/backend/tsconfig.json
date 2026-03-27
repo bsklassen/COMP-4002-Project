@@ -12,5 +12,5 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["src/**/*.ts", "src/api/v1/data/itemData.ts"]
+  "include": ["src/**/*.ts"]
 }
