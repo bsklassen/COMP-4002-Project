@@ -1,7 +1,7 @@
 // Business logic
 
 import type { Item } from "../types/items"
-import * as itemRepository from "../repositories/itemRepository"
+import * as itemRepository from "../repositories/itemRepositoy"
 
 export function droppedItemRandomizer(): Item[]{
     const items = itemRepository.getItems()

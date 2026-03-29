@@ -1,135 +1,65 @@
 import type { BattleLogMessage } from '../types/BattleLogMessage';
-import * as BattleLogRepo from '../repositories/battleLogRepository';
-
+import * as battleLogRepo from '../apis/battleLogRepo';
+ 
 /**
  * These Service functions handle the business logic of our application.
- * In some cases it is a straightforward delegations to a repo,
+ * In some cases it is a straightforward delegation to the repo,
  * but in others it involves making a decision about how to invoke
  * a repository.
  */
-
-/**
- * A straightforward request to get all messages from the repository.
- * Sorts messages by timestamp for chronological display.
- * @returns Promise<BattleLogMessage[]> - an array of messages sorted by time
- */
+ 
+// A straightforward request to get all messages from the repository.
+// Sorts messages by timestamp for chronological display.
 export async function fetchMessages(): Promise<BattleLogMessage[]> {
-    const messages = BattleLogRepo.fetchMessages();
-    return messages.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+    const messages = await battleLogRepo.fetchMessages();
+    return messages.sort(
+        (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    );
 }
-
-/**
- * Add a new system message to the battle log.
- * Business logic: System messages are for game events.
- * @param text - The message text
- * @returns Promise<BattleLogMessage> - the created message
- */
+ 
+// Add a new system message to the battle log.
+// Business logic: system messages are for game events.
 export async function addSystemMessage(text: string): Promise<BattleLogMessage> {
-    return await BattleLogRepo.createMessage({
-        type: 'system',
-        text
-    });
+    return battleLogRepo.createMessage("system", text);
 }
-
-/**
- * Add a new ally message to the battle log.
- * Business logic: Ally messages are for player actions.
- * @param text - The message text
- * @returns Promise<BattleLogMessage> - The created message
- */
+ 
+// Add a new ally message to the battle log.
+// Business logic: ally messages are for player actions.
 export async function addAllyMessage(text: string): Promise<BattleLogMessage> {
-    return await BattleLogRepo.createMessage({
-        type: 'ally',
-        text
-    });
+    return battleLogRepo.createMessage("ally", text);
 }
-
-/**
- * Add a new enemy message to the battle log.
- * Business logic: Enemy messages are for enemy actions and damage
- * feedback.
- * @param text - The message text
- * @returns Promise<BattleLogMEssage> the created message
- */
+ 
+// Add a new enemy message to the battle log.
+// Business logic: enemy messages are for enemy actions and damage feedback.
 export async function addEnemyMessage(text: string): Promise<BattleLogMessage> {
-    return await BattleLogRepo.createMessage({
-        type: 'enemy',
-        text
-    });
+    return battleLogRepo.createMessage("enemy", text);
 }
-
-/**
- * Process an attack action - adds ally message and schedules enemy response.
- * Business logic: Attack action always results in damage feedback after a delay.
- * This demonstrates business logic by determining the attack sequence and damage values.
- * @param weaponType - The type of weapon used (default: 'sword')
- * @param damage - Amount of damage dealt (default: 15)
- * @returns Promise<BattleLogMEssage[]> - both messaged created
- */
-export async function processAttackAction(
-    weaponType: string = 'sword',
-    damage: number = 15
-): Promise<BattleLogMessage[]> {
-    const allyMessage = await addAllyMessage(`You strike the enemy with your ${weaponType}!`);
-
-    // Simulate delay for enemy response (business logic: enemy feedback is delayed)
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    const enemyMessage = await addEnemyMessage(`The enemy takes ${damage} damage!`);
-
-    return [allyMessage, enemyMessage];
+ 
+// Process an attack action.
+// Business logic: attack action always results in damage feedback.
+export async function processAttackAction(): Promise<BattleLogMessage[]> {
+    return battleLogRepo.processAttack();
 }
-
-/**
- * Process a skill/spell action - adds ally message and schedules enemy response.
- * Business logic: Skills have different damage and effects than regular attacks.
- * This is a example of business logic by determining that skills deal more damage.
- * @param skillName - Name of the skill used (default: 'Fireball')
- * @param damage - Amount of damage dealt (default: 25)
- * @returns Promise<BattleLogMessage[]> - both messages created
- */
-export async function processSkillAction(
-    skillName: string = 'Fireball',
-    damage: number = 25
-): Promise<BattleLogMessage[]> {
-    const allyMessage = await addAllyMessage(`You cast ${skillName} on the enemy!`);
-
-    // Simulate delay for enemy response
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    const enemyMessage = await addEnemyMessage(`The enemy is engulfed in flames! ${damage} damage!`);
-
-    return [allyMessage, enemyMessage]
+ 
+// Process a skill action.
+// Business logic: skills deal more damage than regular attacks.
+export async function processSkillAction(): Promise<BattleLogMessage[]> {
+    return battleLogRepo.processSkill();
 }
-
-/**
- * Process a guard/defend action.
- * Business logic: Guarding is a defensive action with system feedback.
- * @returns Promise<BattleLogMessage> - the system message
- */
-export async function processGuardAction(): Promise<BattleLogMessage> {
-    return await addSystemMessage('You raise your shield in defense.');
+ 
+// Process a guard action.
+// Business logic: guarding is a defensive action with system feedback.
+export async function processGuardAction(): Promise<BattleLogMessage[]> {
+    return battleLogRepo.processGuard();
 }
-
-/**
- * Start a new battle - clears old messages and adds initial message.
- * Business logic: New battles should have clean state.
- * @returns Promise<BattleLogMessage> - the initial battle message
- */
+ 
+// Add a system message for movement.
+export async function addMovementMessage(text: string): Promise<BattleLogMessage> {
+    return battleLogRepo.createMessage("system", text);
+}
+ 
+// Start a new battle - clears old messages and adds initial message.
+// Business logic: new battles should have clean state.
 export async function startNewBattle(): Promise<BattleLogMessage> {
-    await BattleLogRepo.clearAllMessages();
-    return await addSystemMessage('Battle has begun!');
-}
-
-/**
- * Get messages filtered by type
- * Business logic: Sometimes we only want to see certain message types.
- * @param type - The message type to filter by
- * @returns Promise<BattleLogMessage[]> - filtered messages
- */
-export async function getMessagesByType(
-    type: 'system' | 'ally' | 'enemy'
-): Promise<BattleLogMessage[]> {
-    const allyMessages = await fetchMessages();
-    return allyMessages.filter(msg => msg.type === type);
+    return battleLogRepo.startBattle();
 }

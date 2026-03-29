@@ -6,8 +6,8 @@
     "apps/*"
   ],
   "scripts": {
-    "start:frontend": "npm run dev --workspace=@comp4002/frontend",
-    "start:backend": "npm start --workspace=@comp4002/backend",
+    "start:frontend": "npm run dev --workspace=@comp4002project/frontend",
+    "start:backend": "npm start --workspace=@comp4002project/backend",
     "dev": "concurrently \"npm:start:frontend\" \"npm:start:backend\""
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import userRepository from "../repositories/UserRepository";
+import userRepository from "../repositories/userRepository";
 import type { User, NewUser } from "../types/User";
 
 export async function login(username: string, email: string, password: string): Promise<User | null> {
