@@ -111,9 +111,14 @@
   font-size: 1.5rem;
   width: 2.5rem;
   height: 2.5rem;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
   background-color: #506179;
   border-radius: 50%;
   border: 2px solid #f5d589;
