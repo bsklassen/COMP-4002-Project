@@ -3,12 +3,11 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": ".",
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "target": "ES2022",
-    "module": "ESNext",
+    "module": "NodeNext",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "allowImportingTsExtensions": true,
     "noEmit": true,
     "types": ["node"]
   },
