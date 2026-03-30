@@ -1,4 +1,4 @@
-import type { CorsOptions } from "@types/cors";
+import type { CorsOptions } from "cors";
 
 // configure the type of requests that CORS will allow to be made to the backend
 const corsOptions: CorsOptions = {
