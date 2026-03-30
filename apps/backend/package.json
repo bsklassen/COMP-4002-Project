@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node-esm src/app.ts",
     "build": "tsc",
-    "vercel-build": "prisma migrate deploy && prisma db seed && npm run build",
+    "vercel-build": "(prisma migrate deploy || prisma db push) && prisma db seed && npm run build",
     "postinstall": "prisma generate"
   },
   "keywords": [],
