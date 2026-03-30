@@ -1,13 +1,12 @@
 import { PrismaClient, BattleLogMessage } from "@prisma/client";
  
 const prisma = new PrismaClient();
-
-// Get all battle log messages ordered by timestamp
-export const getAllMessages = async (): Promise<BattleLogMessage[]> => {
+ 
+// Get all battle log messages for a specific user ordered by timestamp
+export const getAllMessages = async (userId: string): Promise<BattleLogMessage[]> => {
     return prisma.battleLogMessage.findMany({
-        orderBy: {
-            timestamp: "asc"
-        }
+        where: { userId },
+        orderBy: { timestamp: "asc" }
     });
 };
  
@@ -18,21 +17,20 @@ export const getMessageById = async (id: number): Promise<BattleLogMessage | nul
     });
 };
  
-// Create a new battle log message
+// Create a new battle log message for a specific user
 export const createMessage = async (
     type: string,
-    text: string
+    text: string,
+    userId: string
 ): Promise<BattleLogMessage> => {
     return prisma.battleLogMessage.create({
-        data: {
-            type,
-            text
-        }
+        data: { type, text, userId }
     });
 };
  
-// Delete all battle log messages (used to reset battle state)
-export const clearAllMessages = async (): Promise<void> => {
-    await prisma.battleLogMessage.deleteMany();
+// Delete all battle log messages for a specific user (used to reset battle state)
+export const clearAllMessages = async (userId: string): Promise<void> => {
+    await prisma.battleLogMessage.deleteMany({
+        where: { userId }
+    });
 };
- 

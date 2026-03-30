@@ -3,21 +3,32 @@ import { BattleLogMessage } from "@prisma/client";
 import * as battleLogService from "../services/battleLogService";
 import { successResponse } from "../models/responseModel";
  
-// Get all battle log messages
+/**
+ * Controller methods determine how to handle requests and respond to requests.
+ * It sends the appropriate components of the request to services (if needed)
+ * and responds to the request with an appropriate code/body.
+ */
+ 
 export const getAllMessages = async (
-    _req: Request,
+    req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> => {
     try {
-        const messages: BattleLogMessage[] = await battleLogService.fetchAllMessages();
-        res.json(successResponse(messages, "Messages retrieved successfully"));
+        const userId = req.query.userId as string;
+        if (!userId) {
+            res.status(400).json({ error: "userId is required" });
+            return;
+        }
+        const messages: BattleLogMessage[] = await battleLogService.fetchAllMessages(userId);
+        res.status(200).json(
+            successResponse(messages, "Messages retrieved successfully")
+        );
     } catch (error) {
         next(error);
     }
 };
  
-// Get a single battle log message by ID
 export const getMessageById = async (
     req: Request,
     res: Response,
@@ -25,7 +36,7 @@ export const getMessageById = async (
 ): Promise<void> => {
     try {
         const message: BattleLogMessage | null =
-            await battleLogService.fetchMessagesById(
+            await battleLogService.fetchMessageById(
                 Number.parseInt(req.params.id as string)
             );
         if (message) {
@@ -38,72 +49,97 @@ export const getMessageById = async (
     }
 };
  
-// Create a new battle log message
 export const createMessage = async (
     req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { text } = req.body;
-        const message: BattleLogMessage = await battleLogService.addSystemMessage(text);
-        res.status(201).json(successResponse(message, "Message created successfully"));
+        const { text, userId } = req.body;
+        const newMessage = await battleLogService.addSystemMessage(text, userId);
+        res.status(201).json(
+            successResponse(newMessage, "Message created successfully")
+        );
     } catch (error) {
         next(error);
     }
 };
  
-// Start a new battle - clears all messages and adds initial message
 export const startBattle = async (
-    _req: Request,
+    req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> => {
     try {
-        const message: BattleLogMessage = await battleLogService.startNewBattle();
-        res.status(201).json(successResponse(message, "Battle started successfully"));
+        const { userId } = req.body;
+        if (!userId) {
+            res.status(400).json({ error: "userId is required" });
+            return;
+        }
+        const message: BattleLogMessage = await battleLogService.startNewBattle(userId);
+        res.status(201).json(
+            successResponse(message, "Battle started successfully")
+        );
     } catch (error) {
         next(error);
     }
 };
  
-// Process an attack action
 export const attack = async (
-    _req: Request,
+    req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> => {
     try {
-        const messages: BattleLogMessage[] = await battleLogService.processAttackAction();
-        res.status(201).json(successResponse(messages, "Attack processed successfully"));
+        const { userId } = req.body;
+        if (!userId) {
+            res.status(400).json({ error: "userId is required" });
+            return;
+        }
+        const messages: BattleLogMessage[] = await battleLogService.processAttackAction(userId);
+        res.status(201).json(
+            successResponse(messages, "Attack processed successfully")
+        );
     } catch (error) {
         next(error);
     }
 };
  
-// Process a skill action
 export const skill = async (
-    _req: Request,
+    req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> => {
     try {
-        const messages: BattleLogMessage[] = await battleLogService.processSkillAction();
-        res.status(201).json(successResponse(messages, "Skill processed successfully"));
+        const { userId } = req.body;
+        if (!userId) {
+            res.status(400).json({ error: "userId is required" });
+            return;
+        }
+        const messages: BattleLogMessage[] = await battleLogService.processSkillAction(userId);
+        res.status(201).json(
+            successResponse(messages, "Skill processed successfully")
+        );
     } catch (error) {
         next(error);
     }
 };
  
-// Process a guard action
 export const guard = async (
-    _req: Request,
+    req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> => {
     try {
-        const message: BattleLogMessage = await battleLogService.processGuardAction();
-        res.status(201).json(successResponse(message, "Guard processed successfully"));
+        const { userId } = req.body;
+        if (!userId) {
+            res.status(400).json({ error: "userId is required" });
+            return;
+        }
+        const message: BattleLogMessage = await battleLogService.processGuardAction(userId);
+        res.status(201).json(
+            successResponse(message, "Guard processed successfully")
+        );
     } catch (error) {
         next(error);
     }
