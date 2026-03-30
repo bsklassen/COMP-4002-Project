@@ -1,6 +1,6 @@
 import type { Item } from "../types/items";
-import { itemTestData } from "../data/itemTestData";
-import prisma from "../../../../prisma/client";
+import { itemTestData } from "../data/itemTestData.ts";
+import prisma from "../../../../prisma/client.ts";
 
 
 class ItemRepository {
