@@ -18,7 +18,14 @@ export function useBattleLog(dependencies: unknown[]) {
         if (!userId) return;
         try {
             const result = await BattleLogService.fetchMessages(userId);
-            setMessages([...result]);
+            // If no messages exist for this user, start a new battle
+            if (result.length === 0) {
+                await BattleLogService.startNewBattle(userId);
+                const fresh = await BattleLogService.fetchMessages(userId);
+                setMessages([...fresh]);
+            } else {
+                setMessages([...result]);
+            }
         } catch (errorObject) {
             setError(`${errorObject}`);
         }
