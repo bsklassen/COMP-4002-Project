@@ -1,6 +1,6 @@
-import type { User, NewUser } from "../types/User.js";
-import { usersTestData } from "../data/usersTestData.js";
-import prisma from "../../../../prisma/client.js";
+import type { User, NewUser } from "../types/User.ts";
+import { usersTestData } from "../data/usersTestData.ts";
+import prisma from "../../../../prisma/client.ts";
 
 class UserRepository {
   private seeded = false;
