@@ -1,5 +1,5 @@
-import type { Item } from "../types/items.ts"
-import { itemRepository } from "../repositories/itemRepository.ts";
+import type { Item } from "../types/items.js"
+import { itemRepository } from "../repositories/itemRepository.js";
 
 export const getDroppedItems = async (): Promise<Item[]> => {
     try {

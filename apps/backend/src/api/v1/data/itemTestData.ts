@@ -1,4 +1,4 @@
-import type { Item } from "../types/items.ts"
+import type { Item } from "../types/items.js"
 
 export const itemTestData: Item[]= [
     {id: 1, name: "Minor Health Potion"},
