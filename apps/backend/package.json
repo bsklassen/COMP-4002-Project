@@ -14,9 +14,6 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "engines": {
-    "node": "22.x"
-  },
   "prisma": {
     "seed": "npx --yes tsx prisma/seed.ts"
   },
