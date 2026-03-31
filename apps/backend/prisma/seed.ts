@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { USERS, ITEMS, USER_ITEMS, BATTLE_LOG_MESSAGES } from "./seedData.ts";
+import { USERS, ITEMS, USER_ITEMS, BATTLE_LOG_MESSAGES } from "./seedData.js";
 
 const prisma = new PrismaClient();
 
