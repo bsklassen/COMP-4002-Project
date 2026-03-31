@@ -17,10 +17,16 @@
   "type": "commonjs",
   "description": "",
   "devDependencies": {
+    "@rollup/wasm-node": "^4.60.1",
     "concurrently": "^9.2.1",
     "typescript": "^5.8.2"
   },
   "dependencies": {
     "dotenv": "^16.4.7"
+  },
+  "overrides": {
+    "vite": {
+      "rollup": "npm:@rollup/wasm-node"
+    }
   }
 }
