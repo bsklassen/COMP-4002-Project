@@ -4,6 +4,7 @@ import cors from "cors";
 import corsOptions from "../config/cors.js";
 import authRoutes from "./api/v1/routes/authRoutes.js";
 import battleLogRoutes from "./api/v1/routes/battleLogRoutes.js";
+import itemRoutes from "./api/v1/routes/itemRoutes.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1", battleLogRoutes);
+app.use("/api/v1/victory", itemRoutes);
 
 // Fallback
 app.use((req, res) => {
