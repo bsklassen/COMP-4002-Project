@@ -3,10 +3,10 @@ export interface ApiResponse<T> {
     data?: T; // optional data returned in case of success
     message?: string; // information about result
     error?: string; // optional error message
-    code?: string; // optional error code
-}
+    code?: string // optional error code
+};
 
-// Helper functions to easily manufacture different response options
+// helper functions to easily manufacture different response options
 export const successResponse = <T>(
     data?: T,
     message?: string

@@ -1,8 +1,12 @@
+import AllyIcon from "./AllyIcon";
 import BattleLog from "./Battlelog";
+import MovesPanel from "./MovesPanel";
 import { useBattleLog } from "../../../hooks/useBattleLog";
 import "./BattleScreen.css";
- 
+
 function BattleScreen() {
+    // Use the custom hook to get battle log state and actions
+    // Pass empty dependencies array - messages refresh on every action
     const {
         messages,
         error,
@@ -11,75 +15,54 @@ function BattleScreen() {
         handleMovement,
         handleGuard
     } = useBattleLog([]);
- 
-    // Get the last message for action description
-    const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
- 
+
     return (
         <div className="battle-screen">
- 
-            {/* ── TOP HALF: battle area ── */}
+            {/* Battle Area */}
             <div className="battle-area">
- 
-                {/* Enemy side */}
-                <div className="enemy-side">
-                    <div className="combatant-container">
-                        <div className="enemy-placeholder">E</div>
-                        <div className="combatant-name">Enemy</div>
-                        <div className="health-bar-container">
-                            <div className="health-bar-fill" />
-                        </div>
-                    </div>
+                {/* Enemy Section */}
+                <div className="enemy-container">
+                    <div className="enemy-placeholder">E</div>
                 </div>
- 
-                {/* Ally side */}
-                <div className="ally-side">
-                    <div className="combatant-container">
-                        <div className="ally-sprite">A</div>
-                        <div className="combatant-name">Ally</div>
-                        <div className="health-bar-container">
-                            <div className="health-bar-fill" />
-                        </div>
-                    </div>
+
+                {/* Allies Section */}
+                <div className="allies-container">
+                    <div className="ally-sprite">A1</div>
+                    <div className="ally-sprite">A2</div>
+                    <div className="ally-sprite">A3</div>
+                    <div className="ally-sprite">A4</div>
                 </div>
             </div>
- 
-            {/* ── BOTTOM HALF: UI panel ── */}
+
+            {/* Bottom UI Panel */}
             <div className="battle-ui">
- 
-                {/* Left 50%: 2x2 button grid */}
-                <div className="moves-panel">
-                    <button className="move-button" onClick={handleAttack}>Attack</button>
-                    <button className="move-button" onClick={handleSkill}>Skills</button>
-                    <button className="move-button" onClick={handleMovement}>Movement</button>
-                    <button className="move-button" onClick={handleGuard}>Guard</button>
-                </div>
- 
-                {/* Right 50%: action desc + log side by side */}
-                <div className="battle-info">
- 
-                    {/* Action description */}
-                    <div className="action-desc">
-                        {lastMessage ? (
-                            <p>{lastMessage.text}</p>
-                        ) : (
-                            <p>Select an action...</p>
-                        )}
+                {/* Move Buttons - Pass handlers from the hook */}
+                <MovesPanel 
+                    onAttack={handleAttack}
+                    onSkills={handleSkill}
+                    onMovement={handleMovement}
+                    onGuard={handleGuard}
+                />
+
+                {/* Battle Log - Pass messages from the hook, show error if present */}
+                {error ? (
+                    <div className="battle-log">
+                        <span className="error">Something went wrong: ({error})</span>
                     </div>
- 
-                    {/* Battle log */}
-                    {error ? (
-                        <div className="battle-log">
-                            <span className="error">Something went wrong: ({error})</span>
-                        </div>
-                    ) : (
-                        <BattleLog messages={messages} />
-                    )}
- 
+                ) : (
+                    <BattleLog messages={messages} />
+                )}
+
+                {/* Ally Icons */}
+                <div className="ally-icons-panel">
+                    <AllyIcon />
+                    <AllyIcon />
+                    <AllyIcon />
+                    <AllyIcon />
                 </div>
             </div>
         </div>
     );
 }
- 
+
 export default BattleScreen;

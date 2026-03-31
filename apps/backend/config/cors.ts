@@ -24,10 +24,10 @@ const corsOptions: CorsOptions = {
             callback(new Error("Not allowed by CORS restriction"), false);
         }
     },
-    // Allow specific headers, methods, and inclusion of credentials
-    allowedHeaders: ["Content-Type", "Authorization"],
+    // allow specific headers, methods, and inclusion of credentials
+    allowedHeaders:['Content-Type', 'Authorization'],
     methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
     credentials: true
-};
- 
+}
+
 export default corsOptions;
