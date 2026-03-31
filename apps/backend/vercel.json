@@ -1,6 +1,10 @@
 {
    "relatedProjects": ["prj_rNnGaofeLChPOxJX3Q8cMmN9BBHT"],
 
+    "installCommand": "npm install",
+
+    "buildCommand": "npm run vercel-build",
+
    "git": {
      "deploymentEnabled": {
          "*": false,
