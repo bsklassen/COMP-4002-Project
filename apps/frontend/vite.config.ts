@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': {
+      '^/api/': {
         target: 'http://localhost:4000',
         changeOrigin: true,
         secure: false,
@@ -15,7 +15,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: '../dist/frontend',
+    outDir: 'dist',
     emptyOutDir: true,
   },
 })

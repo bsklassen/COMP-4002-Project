@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { CorsOptions } from "cors";
+=======
+import type { CorsOptions } from "cors";
+>>>>>>> origin/develop
 
 // configure the type of requests that CORS will allow to be made to the backend
 const corsOptions: CorsOptions = {
