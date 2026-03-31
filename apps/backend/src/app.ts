@@ -1,8 +1,9 @@
 import "dotenv/config";
 import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
-import corsOptions from "../config/cors.ts";
-import authRoutes from "./api/v1/routes/authRoutes.ts";
+import corsOptions from "../config/cors.js";
+import authRoutes from "./api/v1/routes/authRoutes.js";
+import battleLogRoutes from "./api/v1/routes/battleLogRoutes.js";
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1", battleLogRoutes);
 
 // Fallback
 app.use((req, res) => {

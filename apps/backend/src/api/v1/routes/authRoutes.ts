@@ -1,6 +1,6 @@
 import { Router } from "express";
-import * as controller from "../controllers/authController.ts";
-import { validate } from "../middleware/validate.ts";
+import * as controller from "../controllers/authController.js";
+import { validate } from "../middleware/validate.js";
 import Joi from "joi";
 
 const router = Router();

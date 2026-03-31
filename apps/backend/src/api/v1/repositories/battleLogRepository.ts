@@ -1,4 +1,5 @@
-import { PrismaClient, BattleLogMessage } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import type { BattleLogMessage } from "@prisma/client";
  
 const prisma = new PrismaClient();
  

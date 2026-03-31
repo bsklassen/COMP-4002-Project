@@ -1,7 +1,7 @@
 import express, { Router } from "express";
-import { validateRequest } from "../middleware/validate";
-import { battleLogSchema } from "../validations/battleLogValidation";
-import * as battleLogController from "../controllers/battleLogController";
+import { validate } from "../middleware/validate.js";
+import { battleLogSchema } from "../validations/battleLogValidation.js";
+import * as battleLogController from "../controllers/battleLogController.js";
  
 const router: Router = express.Router();
  
@@ -12,7 +12,7 @@ router.get("/battlelogs", battleLogController.getAllMessages);
 router.get("/battlelogs/:id", battleLogController.getMessageById);
  
 // POST a new battle log message
-router.post("/battlelogs", validateRequest(battleLogSchema), battleLogController.createMessage);
+router.post("/battlelogs", validate(battleLogSchema), battleLogController.createMessage);
  
 // POST to start a new battle - clears all messages
 router.post("/battlelogs/start", battleLogController.startBattle);

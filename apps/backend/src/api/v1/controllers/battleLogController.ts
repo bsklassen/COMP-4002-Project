@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import { BattleLogMessage } from "@prisma/client";
-import * as battleLogService from "../services/battleLogService";
-import { successResponse } from "../models/responseModel";
+import type { Request, Response, NextFunction } from "express";
+import type { BattleLogMessage } from "@prisma/client";
+import * as battleLogService from "../services/battleLogService.js";
+import { successResponse } from "../models/responseModel.js";
  
 /**
  * Controller methods determine how to handle requests and respond to requests.

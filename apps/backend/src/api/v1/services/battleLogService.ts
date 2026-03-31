@@ -1,5 +1,5 @@
-import { BattleLogMessage } from "@prisma/client";
-import * as battleLogRepository from "../repositories/battleLogRepository";
+import type { BattleLogMessage } from "@prisma/client";
+import * as battleLogRepository from "../repositories/battleLogRepository.js";
  
 // Get all messages for a specific user
 export const fetchAllMessages = async (userId: string): Promise<BattleLogMessage[]> => {
