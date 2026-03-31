@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import * as authService from "../services/authService";
-import type { User, NewUser } from "../types/User";
+import type { User, NewUser } from "../types/User.ts";
 
 /**
  * useAuth hook

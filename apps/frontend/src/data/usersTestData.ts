@@ -1,4 +1,4 @@
-import type { User } from "../types/User";
+import type { User } from "../types/User.ts";
 
 export const usersTestData: User[] = [
   { id: "u1", username: "SpookyWarrior", email: "warrior@haunted.com", password: "warrior123" },

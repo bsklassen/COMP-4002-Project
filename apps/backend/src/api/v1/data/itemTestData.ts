@@ -1,6 +1,6 @@
 import type { Item } from "../types/items.js"
 
-export const items: Item[] = [
+export const itemTestData: Item[]= [
     {id: 1, name: "Minor Health Potion"},
     {id: 2, name: "Broken Straight Sword"},
     {id: 3, name: "A rusted nail"},

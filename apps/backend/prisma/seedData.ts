@@ -63,5 +63,3 @@ export const BATTLE_LOG_MESSAGES = [
   { type: "system", text: "You blocked the attack!", timestamp: new Date("2026-02-24T10:00:23"), userId: "u1" },
   { type: "ally", text: "You raise your shield in defense.", timestamp: new Date("2026-02-24T10:00:27"), userId: "u1" },
 ];
-
-

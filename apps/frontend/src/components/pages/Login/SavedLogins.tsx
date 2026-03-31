@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./SavedLogins.css";
-import type { User } from "../../../types/User";
+import type { User } from "../../../types/User.ts";
 
 // Re-export the project-wide `User` type as `SavedUser` for compatibility
 export type SavedUser = User;

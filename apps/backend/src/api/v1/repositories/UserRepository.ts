@@ -1,10 +1,10 @@
-import type { User, NewUser } from "../types/User.ts";
-import { usersTestData } from "../data/usersTestData.ts";
-import prisma from "../../../../prisma/client.ts";
+import type { User, NewUser } from "../types/User.js";
+import { usersTestData } from "../data/usersTestData.js";
+import prisma from "../../../../prisma/client.js";
 
 class UserRepository {
   private seeded = false;
-  private useDatabase = Boolean(process.env.DATABASE_URL);
+  private useDatabase = Boolean(process.env.DB_URL ?? process.env.DATABASE_URL);
   private users: User[] = [...usersTestData];
 
   private async ensureSeeded(): Promise<void> {

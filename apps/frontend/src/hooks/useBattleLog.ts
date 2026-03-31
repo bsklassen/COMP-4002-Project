@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { BattleLogMessage } from '../types/BattleLogMessage';
+import type { BattleLogMessage } from '../types/BattleLogMessage.ts';
 import * as BattleLogService from '../services/battleLogService';
 
 /**
