@@ -3,15 +3,19 @@ import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
 import corsOptions from "../config/cors.js";
 import authRoutes from "./api/v1/routes/authRoutes.js";
-import itemRoutes from "./api/v1/routes/itemRoutes.js";
+import battleLogRoutes from "./api/v1/routes/battleLogRoutes.js";
 
 const app = express();
 
 app.use(cors(corsOptions));
 app.use(express.json());
 
+app.get("/", (_req, res) => {
+  res.status(200).json({ status: "ok", service: "backend" });
+});
+
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/victory", itemRoutes);
+app.use("/api/v1", battleLogRoutes);
 
 // Fallback
 app.use((req, res) => {
@@ -26,10 +30,9 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT ?? 4000;
-
 if (!process.env.VERCEL) {
   app.listen(PORT, () => {
-    console.log(`Backend running on http://localhost:${PORT}/api/v1/`);
+    console.log(`Backend running on http://localhost:${PORT}/api/v1/auth`);
   });
 }
 

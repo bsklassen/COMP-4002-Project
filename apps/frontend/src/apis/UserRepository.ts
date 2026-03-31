@@ -3,7 +3,7 @@ import type { User, NewUser } from "../types/User";
 type ErrorResponseJSON = { error?: string };
 
 // Build the API endpoint URL from environment variable or use relative path for local dev
-const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || "";
 const AUTH_ENDPOINT = `${API_BASE_URL}/api/v1/auth`;
 
 async function assertResponse<T>(res: Response): Promise<T> {

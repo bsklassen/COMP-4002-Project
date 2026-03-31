@@ -6,7 +6,7 @@ import "./Login.css";
 
 
 function Login() {
-  const { setUsername: setGlobalUsername } = useUser();
+  const { setUsername: setGlobalUsername, setUserId } = useUser();
   const { savedUsers, login: authLogin, signup: authSignup, remove: authRemove } = useAuth();
   const [signup, setSignup] = useState(false);
   const [username, setUsername] = useState("");
@@ -54,6 +54,9 @@ function Login() {
         const user = await authLogin(username, email, password);
         if (user) {
           setGlobalUsername(username);
+          /* Rahman's addition */
+          setUserId(user.id);
+          /* Rahman */
           setSuccessMessage("Login successful!");
           setTimeout(() => setSuccessMessage(""), 2000);
         } else {
