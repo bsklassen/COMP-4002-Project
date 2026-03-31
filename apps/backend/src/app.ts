@@ -34,10 +34,6 @@ const PORT = process.env.PORT ?? 4000;
 if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Backend running on http://localhost:${PORT}/api/v1/`);
-
-if (!process.env.VERCEL) {
-  app.listen(PORT, () => {
-    console.log(`Backend running on http://localhost:${PORT}/api/v1/`);
   });
 }
 
