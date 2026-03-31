@@ -5,9 +5,8 @@ export interface ApiResponse<T> {
     error?: string; // optional error message
     code?: string; // optional error code
 }
-
+ 
 // Helper functions to easily manufacture different response options
-
 export const successResponse = <T>(
     data?: T,
     message?: string
@@ -16,7 +15,7 @@ export const successResponse = <T>(
     data,
     message
 });
-
+ 
 export const errorResponse = (
     message: string,
     code?: string

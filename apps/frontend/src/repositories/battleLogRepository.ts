@@ -1,4 +1,4 @@
-import type { BattleLogMessage, CreateBattleLogMessage } from "../types/BattleLogMessage.ts";
+import type { BattleLogMessage, CreateBattleLogMessage } from "../types/BattleLogMessage";
 import { battleLogData } from "../data/testBattleLogMessages";
 
 // Currently we use a mock database to simulate having a backend.

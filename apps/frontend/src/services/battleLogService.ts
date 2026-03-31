@@ -1,6 +1,6 @@
 import type { BattleLogMessage } from '../types/BattleLogMessage';
 import * as battleLogRepo from '../apis/battleLogRepo';
-
+ 
 /**
  * These Service functions handle the business logic of our application.
  * In some cases it is a straightforward delegation to the repo,
