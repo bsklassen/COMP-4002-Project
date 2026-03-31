@@ -1,9 +1,9 @@
 import "dotenv/config";
 import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
-import corsOptions from "../config/cors.ts";
-import authRoutes from "./api/v1/routes/authRoutes.ts";
-import itemRoutes from "./api/v1/routes/itemRoutes.ts";
+import corsOptions from "../config/cors.js";
+import authRoutes from "./api/v1/routes/authRoutes.js";
+import itemRoutes from "./api/v1/routes/itemRoutes.js";
 
 const app = express();
 

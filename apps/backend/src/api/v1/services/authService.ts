@@ -1,5 +1,5 @@
-import { userRepository } from "../repositories/UserRepository.ts";
-import type { User, NewUser } from "../types/User.ts";
+import { userRepository } from "../repositories/UserRepository.js";
+import type { User, NewUser } from "../types/User.js";
 
 export async function login(username: string, email: string, password: string): Promise<User | null> {
   const users = await userRepository.getAll();
