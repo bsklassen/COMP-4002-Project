@@ -1,21 +1,5 @@
-<<<<<<< HEAD
 import { Request, Response, NextFunction } from "express";
- 
-const errorHandler = (
-    err: Error,
-    _req: Request,
-    res: Response,
-    _next: NextFunction
-) => {
-    console.error(err.stack);
-    res.status(500).json({
-        success: false,
-        message: err.message || "Internal server error"
-    });
-};
- 
-=======
-import {Request, Response, NextFunction} from "express";
+
 import { errorResponse } from "../models/responseModel.js";
 
 interface ExtendedError extends Error {
@@ -35,9 +19,8 @@ const errorHandler = (
     console.error(`Error: ${err.message} (Code: ${code})`);
 
     res.status(statusCode).json(
-        errorResponse(`An unexpected error occured: ${code}`)
+        errorResponse(`An unexpected error occurred: ${code}`, code)
     );
 };
 
->>>>>>> origin/develop
 export default errorHandler;

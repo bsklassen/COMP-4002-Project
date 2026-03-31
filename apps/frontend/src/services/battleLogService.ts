@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 import type { BattleLogMessage } from '../types/BattleLogMessage';
 import * as battleLogRepo from '../apis/battleLogRepo';
- 
-=======
-import type { BattleLogMessage } from '../types/BattleLogMessage.ts';
-import * as BattleLogRepo from '../repositories/battleLogRepository';
 
->>>>>>> origin/develop
 /**
  * These Service functions handle the business logic of our application.
  * In some cases it is a straightforward delegation to the repo,
