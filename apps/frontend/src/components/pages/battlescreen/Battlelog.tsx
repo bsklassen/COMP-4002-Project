@@ -1,4 +1,4 @@
-import type { BattleLogMessage } from "../../../types/BattleLogMessage.ts";
+import type { BattleLogMessage } from "../../../types/BattleLogMessage";
 import "./BattleScreen.css"
 
 
