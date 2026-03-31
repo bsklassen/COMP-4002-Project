@@ -1,18 +1,24 @@
 {
-  "name": "comp-4002-project",
-  "version": "0.0.0",
-  "private": true,
+  "name": "complexicon",
   "workspaces": [
     "apps/*"
   ],
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
-    "start:frontend": "npm run dev --workspace=@comp4002project/frontend",
-    "start:backend": "npm start --workspace=@comp4002project/backend",
-    "dev": "concurrently \"npm:start:frontend\" \"npm:start:backend\""
+    "dev": "concurrently \"npm:start:frontend\" \"npm:start:backend\"",
+    "migrate:backend": "npx --workspace=@complexicon/backend prisma migrate dev",
+    "start:frontend": "npm run dev --workspace=@complexicon/frontend",
+    "start:backend": "npm start --workspace=@complexicon/backend"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
   "devDependencies": {
-    "concurrently": "^9.1.2",
-    "typescript": "~5.9.3"
+    "concurrently": "^9.2.1",
+    "typescript": "^5.8.2"
   },
   "dependencies": {
     "dotenv": "^16.4.7"

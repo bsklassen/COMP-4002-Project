@@ -1,36 +1,31 @@
-import express, { Express } from "express";
-import morgan from "morgan";
+import "dotenv/config";
+import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import corsOptions from "../config/cors";
-import battleLogRoutes from "./api/v1/routes/battleLogRoutes";
-import errorHandler from "./api/v1/middleware/errorHandler";
- 
-// Initialize express application
-const app: Express = express();
- 
-// Allow use of .env variables
-dotenv.config();
- 
-// Add morgan middleware, combined format logs info about each HTTP request
-app.use(morgan("combined"));
- 
-// Allow express to parse json
-app.use(express.json());
- 
-// Add Cross-Origin Resource Sharing middleware
-// This will refuse requests from origins that do not fulfill corsOptions requirements
+import corsOptions from "../config/cors.ts";
+import authRoutes from "./api/v1/routes/authRoutes.ts";
+
+const app = express();
+
 app.use(cors(corsOptions));
- 
-// Listen for requests on root and send simple text response
-app.get("/", (_req, res) => {
-    res.send("Got response from COMP-4002 backend!");
+app.use(express.json());
+
+app.use("/api/v1/auth", authRoutes);
+
+// Fallback
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
 });
- 
-// Use battle log routes
-app.use("/api/v1", battleLogRoutes);
- 
-// Error handler catches errors as last element in middleware chain
+
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: (err as Error).message ?? "Internal server error" });
+};
+
 app.use(errorHandler);
- 
+
+const PORT = process.env.PORT ?? 4000;
+app.listen(PORT, () => {
+  console.log(`Backend running on http://localhost:${PORT}/api/v1/auth`);
+});
+
 export default app;

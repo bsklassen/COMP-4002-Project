@@ -1,18 +1,16 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
     "outDir": "./dist",
-    "baseUrl": ".",
-    "sourceMap": true,
-    "lib": ["ESNext"],
- 
-    /* Paths */
-    "paths": {
-      "@shared/*": ["../../shared/*"]
-    }
+    "rootDir": ".",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "module": "NodeNext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "types": ["node"]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*.ts", "config/**/*.ts", "prisma/**/*.ts"]
 }

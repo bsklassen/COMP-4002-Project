@@ -1,35 +1,22 @@
-import { Request, Response, NextFunction } from "express";
-import { ObjectSchema } from "joi";
-import { MiddlewareFunction, RequestData } from "../types/express";
- 
-// Validate method provided by Joi package
-export const validate = <T>(schema: ObjectSchema<T>, data: T): void => {
-    const { error } = schema.validate(data, { abortEarly: false });
-    if (error) {
-        throw new Error(
-            `Validation error: ${
-                error.details.map(x => x.message)
-                .join(", ")
-            }`
-        );
+import type { Request, Response, NextFunction } from "express";
+import Joi from "joi";
+
+export const validate = (schema: Joi.ObjectSchema) => (req: Request, res: Response, next: NextFunction) => {
+  const { error } = schema.validate(
+    {
+      body: req.body,
+      params: req.params,
+      query: req.query,
+    },
+    {
+      allowUnknown: true,
+      abortEarly: false,
     }
-};
- 
-// Run validate method against received data
-// Provided as middleware function
-export const validateRequest = (schema: ObjectSchema): MiddlewareFunction => {
-    return (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const data: RequestData = {
-                ...req.body,
-                ...req.params,
-                ...req.query
-            };
-            validate(schema, data);
-            // Invoke next middleware if no error is caught
-            next();
-        } catch (error) {
-            res.status(400).json({ error: (error as Error).message });
-        }
-    };
+  );
+
+  if (error) {
+    return res.status(400).json({ error: "Invalid request", details: error.details });
+  }
+
+  next();
 };
