@@ -1,9 +1,9 @@
 {
    "relatedProjects": ["prj_rNnGaofeLChPOxJX3Q8cMmN9BBHT"],
 
-    "installCommand": "npm install",
+    "installCommand": "cd ../.. && npm ci --workspace=@complexicon/backend --include-workspace-root",
 
-    "buildCommand": "npm run vercel-build",
+    "buildCommand": "cd ../.. && npm run vercel-build --workspace=@complexicon/backend",
 
    "git": {
      "deploymentEnabled": {
