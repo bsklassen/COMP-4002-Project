@@ -1,4 +1,5 @@
-import {Request, Response, NextFunction} from "express";
+import { Request, Response, NextFunction } from "express";
+
 import { errorResponse } from "../models/responseModel.js";
 
 interface ExtendedError extends Error {
@@ -18,7 +19,7 @@ const errorHandler = (
     console.error(`Error: ${err.message} (Code: ${code})`);
 
     res.status(statusCode).json(
-        errorResponse(`An unexpected error occured: ${code}`)
+        errorResponse(`An unexpected error occurred: ${code}`, code)
     );
 };
 

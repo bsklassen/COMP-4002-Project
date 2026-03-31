@@ -48,11 +48,18 @@ function SavedLogins({ savedUsers, onSelectUser, onDeleteUser }: SavedLoginsProp
       {isOpen && (
         <div className="saved-logins-dropdown">
           {savedUsers.map((user) => (
-            <button
+            <div
               key={user.id}
-              type="button"
               className="saved-login-item"
+              role="button"
+              tabIndex={0}
               onClick={() => handleSelectUser(user)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleSelectUser(user);
+                }
+              }}
             >
               <div className="user-avatar">{user.username ? user.username.charAt(0).toUpperCase() : "?"}</div>
               <div className="user-info">
@@ -67,7 +74,7 @@ function SavedLogins({ savedUsers, onSelectUser, onDeleteUser }: SavedLoginsProp
               >
                 ✕
               </button>
-            </button>
+            </div>
           ))}
         </div>
       )}
