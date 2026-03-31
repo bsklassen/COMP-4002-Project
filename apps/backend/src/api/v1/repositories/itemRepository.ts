@@ -5,7 +5,7 @@ import prisma from "../../../../prisma/client.js";
 
 class ItemRepository {
     private seeded = false;
-    private useDatabase = Boolean(process.env.DATABASE_URL);
+    private useDatabase = Boolean(process.env.DB_URL ?? process.env.DATABASE_URL);
     private items: Item[] = [...itemTestData]
 
     private async ensureSeeded(): Promise<void> {

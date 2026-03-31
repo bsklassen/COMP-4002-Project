@@ -15,7 +15,7 @@
   "license": "ISC",
   "description": "",
   "prisma": {
-    "seed": "ts-node-esm --transpile-only prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
