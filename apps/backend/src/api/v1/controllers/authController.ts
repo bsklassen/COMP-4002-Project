@@ -1,4 +1,4 @@
-import * as authService from "../services/authService.ts";
+import * as authService from "../services/authService.js";
 import type { Request, Response, NextFunction } from "express";
 
 export async function login(req: Request, res: Response, next: NextFunction) {
