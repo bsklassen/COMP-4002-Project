@@ -4,7 +4,11 @@ import prisma from "../../../../prisma/client.js";
 
 class UserRepository {
   private seeded = false;
+<<<<<<< HEAD
   private useDatabase = Boolean(process.env.DB_URL);
+=======
+  private useDatabase = Boolean(process.env.DB_URL ?? process.env.DATABASE_URL);
+>>>>>>> origin/develop
   private users: User[] = [...usersTestData];
 
   private async ensureSeeded(): Promise<void> {
