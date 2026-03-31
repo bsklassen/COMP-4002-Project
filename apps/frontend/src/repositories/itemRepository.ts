@@ -22,7 +22,7 @@
 //     items = items.filter(item => item.id != id);
 // }
 
-import type { Item } from "../types/items"
+import type { Item } from "../types/items.ts"
 
 type ItemsResponseJSON = {message: string, data: Item[]};
 

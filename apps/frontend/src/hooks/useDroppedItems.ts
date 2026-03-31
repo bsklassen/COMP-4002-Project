@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import * as itemServices from "../services/itemServices";
-import type { Item } from "../types/items"
+import type { Item } from "../types/items.ts"
 
 
 export function useDroppedItems() {

@@ -1,6 +1,6 @@
 // Business logic
 
-import type { Item } from "../types/items"
+import type { Item } from "../types/items.ts"
 import * as itemRepository from "../repositories/itemRepository"
 
 export async function getDroppedItems(): Promise<Item[]>{

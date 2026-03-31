@@ -1,4 +1,4 @@
-import type { BattleLogMessage } from '../types/BattleLogMessage';
+import type { BattleLogMessage } from '../types/BattleLogMessage.ts';
 import * as BattleLogRepo from '../repositories/battleLogRepository';
 
 /**

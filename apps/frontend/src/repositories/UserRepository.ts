@@ -1,4 +1,4 @@
-import type { User, NewUser } from "../types/User";
+import type { User, NewUser } from "../types/User.ts";
 import { usersTestData } from "../data/usersTestData";
 
 class UserRepository {
