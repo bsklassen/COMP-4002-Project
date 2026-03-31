@@ -22,6 +22,7 @@
     "@types/node": "^22.13.10",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
+    "effect": "^3.18.4",
     "prisma": "^6.5.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
