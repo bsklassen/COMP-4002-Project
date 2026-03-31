@@ -17,5 +17,5 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["src/**/*.ts", "config/**/*.ts", "prisma/**/*.ts"]
+  "include": ["api/**/*.ts", "src/**/*.ts", "config/**/*.ts", "prisma/**/*.ts"]
 }

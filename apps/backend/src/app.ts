@@ -10,6 +10,10 @@ const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
 
+app.get("/", (_req, res) => {
+  res.status(200).json({ status: "ok", service: "backend" });
+});
+
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1", battleLogRoutes);
 
@@ -26,8 +30,10 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT ?? 4000;
-app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}/api/v1/auth`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Backend running on http://localhost:${PORT}/api/v1/auth`);
+  });
+}
 
 export default app;
