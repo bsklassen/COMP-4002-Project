@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from "express";
-import { errorResponse } from "../models/responseModel.js";
+import { errorResponse } from "../models/responseModel.ts";
 
 interface ExtendedError extends Error {
     code?: string;

@@ -1,8 +1,9 @@
 import "dotenv/config";
 import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
-import corsOptions from "../config/cors.js";
-import authRoutes from "./api/v1/routes/authRoutes.js";
+import corsOptions from "../config/cors.ts";
+import authRoutes from "./api/v1/routes/authRoutes.ts";
+import itemRoutes from "./api/v1/routes/itemRoutes.ts";
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/victory", itemRoutes);
 
 // Fallback
 app.use((req, res) => {
@@ -25,7 +27,7 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT ?? 4000;
 
-if (process.env.VERCEL !== "1") {
+if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Backend running on http://localhost:${PORT}/api/v1/`);
   });

@@ -1,4 +1,4 @@
-import type { BattleLogMessage } from "../types/BattleLogMessage.js";
+import type { BattleLogMessage } from "../types/BattleLogMessage.ts";
 
 /**
  * This array of BattleLogMessages will serve as placeholder data while we don't have a 
