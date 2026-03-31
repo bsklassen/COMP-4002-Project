@@ -1,4 +1,4 @@
-import type { Item } from "../types/items";
+import type { Item } from "../types/items.ts";
 import { itemTestData } from "../data/itemTestData.ts";
 import prisma from "../../../../prisma/client.ts";
 
