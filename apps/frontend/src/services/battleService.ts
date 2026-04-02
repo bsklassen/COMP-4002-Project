@@ -80,6 +80,14 @@ export async function advanceFight(userId: string): Promise<void> {
   if (!res.ok) throw new Error(`advanceFight failed: ${res.status}`);
 }
 
+export async function resetSave(userId: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/v1/save/reset`, {
+    method: "POST",
+    headers: { "x-user-id": userId },
+  });
+  if (!res.ok) throw new Error(`resetSave failed: ${res.status}`);
+}
+
 export async function getEnemyByOrder(order: number): Promise<Enemy> {
   const res = await fetch(`${API_BASE}/api/v1/enemies/order/${order}`);
   if (!res.ok) throw new Error(`getEnemyByOrder failed: ${res.status}`);

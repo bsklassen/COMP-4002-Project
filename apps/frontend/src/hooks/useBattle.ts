@@ -5,6 +5,8 @@ import * as battleService from "../services/battleService";
 import type { Battle, Enemy } from "../services/battleService";
 import { useUser } from "../components/common/usercontext/UserContext";
 
+const DEFEAT_DELAY_MS = 5000;
+
 let _msgIdCounter = 1;
 function nextId() { return _msgIdCounter++; }
 
@@ -91,7 +93,11 @@ export function useBattle() {
           appendMessage("system", "Victory! The enemy has been defeated.");
           navigate("/victory", { state: { enemyName: enemy?.name ?? "Enemy" } });
         } else {
-          appendMessage("system", "You were defeated!");
+          appendMessage("system", "You were defeated!\nStarting on floor 1 again.");
+          setTimeout(async () => {
+            if (userId) await battleService.resetSave(userId);
+            navigate("/battle", { replace: true, state: { resetKey: Date.now() } });
+          }, DEFEAT_DELAY_MS);
         }
       }
     } catch (err) {
