@@ -17,6 +17,8 @@ model User {
   password       String
   items          UserItem[]
   battleMessages BattleLogMessage[]
+  battles        Battle[]
+  userSave       UserSave?
 }
 
 model Item {
@@ -42,4 +44,40 @@ model BattleLogMessage {
   timestamp DateTime @default(now())
   userId    String?
   user      User?    @relation(fields: [userId], references: [id])
+}
+
+model Enemy {
+  id                    Int      @id @default(autoincrement())
+  name                  String
+  imagePath             String
+  maxHp                 Int
+  atk                   Int
+  def                   Int
+  basicMultiplier       Float
+  basicDamageBonus      Float
+  ultimateMultiplier    Float
+  ultimateDamageBonus   Float
+  order                 Int      @unique
+  battles               Battle[]
+}
+
+model Battle {
+  id          String   @id @default(uuid())
+  userId      String
+  enemyId     Int
+  playerHp    Int
+  enemyHp     Int
+  isComplete  Boolean  @default(false)
+  playerWon   Boolean?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+  enemy       Enemy    @relation(fields: [enemyId], references: [id])
+}
+
+model UserSave {
+  id           String @id @default(uuid())
+  userId       String @unique
+  currentFight Int    @default(1)
+  user         User   @relation(fields: [userId], references: [id])
 }
