@@ -14,19 +14,17 @@ import "./BattleScreen.css";
  */
 
 interface MovesPanelProps {
-    onAttack: () => void;
-    onSkills: () => void;
-    onMovement: () => void;
-    onGuard: () => void;
+    onAction: (action: "attack" | "skill" | "skill2" | "guard") => void;
+    disabled: boolean;
 }
 
-function MovesPanel({ onAttack, onSkills, onMovement, onGuard }: MovesPanelProps) {
+function MovesPanel({ onAction, disabled }: MovesPanelProps) {
     return (
         <div className="moves-panel">
-            <button className="move-button" onClick={onAttack}>Attack</button>
-            <button className="move-button" onClick={onSkills}>Skills</button>
-            <button className="move-button" onClick={onMovement}>Movement</button>
-            <button className="move-button" onClick={onGuard}>Guard</button>
+            <button className="move-button" onClick={() => onAction("attack")} disabled={disabled}>Attack</button>
+            <button className="move-button" onClick={() => onAction("skill")} disabled={disabled}>Skills</button>
+            <button className="move-button" onClick={() => onAction("skill2")} disabled={disabled}>Movement</button>
+            <button className="move-button" onClick={() => onAction("guard")} disabled={disabled}>Guard</button>
         </div>
     );
 }

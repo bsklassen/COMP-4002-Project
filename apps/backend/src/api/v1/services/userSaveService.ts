@@ -1,8 +1,11 @@
 import { userSaveRepository } from "../repositories/userSaveRepository.js";
 import type { UserSave } from "../types/UserSave.js";
 
-export async function getUserSave(userId: string): Promise<UserSave | null> {
-  return userSaveRepository.getByUserId(userId);
+export async function getUserSave(userId: string): Promise<UserSave> {
+  const existing = await userSaveRepository.getByUserId(userId);
+  if (existing) return existing;
+  // Auto-initialize save for new users
+  return userSaveRepository.upsert(userId, 1);
 }
 
 export async function advanceFight(userId: string): Promise<UserSave> {
