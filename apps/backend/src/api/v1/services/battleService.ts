@@ -48,13 +48,19 @@ export async function playerAction(
   }
   const newEnemyHp = Math.max(0, battle.enemyHp - playerDamageDealt);
 
-  // Enemy turn
-  const enemyMove: "basic" | "ultimate" = Math.random() < 0.7 ? "basic" : "ultimate";
-  const enemyMultiplier = enemyMove === "basic" ? enemy.basicMultiplier : enemy.ultimateMultiplier;
-  const enemyDmgBonus = enemyMove === "basic" ? enemy.basicDamageBonus : enemy.ultimateDamageBonus;
-  const effectiveDef = guardActive ? PLAYER_DEF * 2 : PLAYER_DEF;
-  const enemyDamageDealt = calculateDamage(enemyMultiplier, enemy.atk, enemyDmgBonus, effectiveDef);
-  const newPlayerHp = Math.max(0, battle.playerHp - enemyDamageDealt);
+  // Enemy turn — skip if enemy was just killed
+  let enemyMove: "basic" | "ultimate" = "basic";
+  let enemyDamageDealt = 0;
+  let newPlayerHp = battle.playerHp;
+
+  if (newEnemyHp > 0) {
+    enemyMove = Math.random() < 0.7 ? "basic" : "ultimate";
+    const enemyMultiplier = enemyMove === "basic" ? enemy.basicMultiplier : enemy.ultimateMultiplier;
+    const enemyDmgBonus = enemyMove === "basic" ? enemy.basicDamageBonus : enemy.ultimateDamageBonus;
+    const effectiveDef = guardActive ? PLAYER_DEF * 2 : PLAYER_DEF;
+    enemyDamageDealt = calculateDamage(enemyMultiplier, enemy.atk, enemyDmgBonus, effectiveDef);
+    newPlayerHp = Math.max(0, battle.playerHp - enemyDamageDealt);
+  }
 
   // Resolve outcome
   let isComplete = false;
@@ -75,12 +81,17 @@ export async function playerAction(
     playerWon,
   });
 
-  return {
+  const result: BattleActionResult = {
     battle: updatedBattle,
     playerDamageDealt,
-    enemyMove,
-    enemyDamageDealt,
     isComplete,
     playerWon,
   };
+
+  if (newEnemyHp > 0) {
+    result.enemyMove = enemyMove;
+    result.enemyDamageDealt = enemyDamageDealt;
+  }
+
+  return result;
 }

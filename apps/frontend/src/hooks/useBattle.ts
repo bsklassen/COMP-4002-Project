@@ -86,9 +86,10 @@ export function useBattle() {
         appendMessage("ally", `[Player] used ${actionLabel} → dealt ${result.playerDamageDealt} damage`);
       }
 
-      const enemyMoveLabel =
-        result.enemyMove === "basic" ? "Basic Attack" : "Ultimate";
-      appendMessage("enemy", `[Enemy] used ${enemyMoveLabel} → dealt ${result.enemyDamageDealt} damage`);
+      if (result.enemyMove !== undefined) {
+        const enemyMoveLabel = result.enemyMove === "basic" ? "Basic Attack" : "Ultimate";
+        appendMessage("enemy", `[Enemy] used ${enemyMoveLabel} → dealt ${result.enemyDamageDealt} damage`);
+      }
 
       if (result.isComplete) {
         if (result.playerWon) {

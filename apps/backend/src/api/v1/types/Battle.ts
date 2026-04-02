@@ -13,8 +13,8 @@ export type Battle = {
 export type BattleActionResult = {
   battle: Battle;
   playerDamageDealt: number;
-  enemyMove: "basic" | "ultimate";
-  enemyDamageDealt: number;
+  enemyMove?: "basic" | "ultimate";
+  enemyDamageDealt?: number;
   isComplete: boolean;
   playerWon: boolean | null;
 };
