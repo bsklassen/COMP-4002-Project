@@ -53,12 +53,14 @@ export async function playerAction(
   if (healActive) {
     playerHpRestored = Math.min(HEAL_AMOUNT, PLAYER_MAX_HP - battle.playerHp);
   }
+  // Apply heal before enemy attacks so HP is correct for both the death check and the saved value
+  const playerHpAfterHeal = Math.min(PLAYER_MAX_HP, battle.playerHp + playerHpRestored);
   const newEnemyHp = Math.max(0, battle.enemyHp - playerDamageDealt);
 
   // Enemy turn — skip if enemy was just killed
   let enemyMove: "basic" | "ultimate" = "basic";
   let enemyDamageDealt = 0;
-  let newPlayerHp = battle.playerHp;
+  let newPlayerHp = playerHpAfterHeal;
 
   if (newEnemyHp > 0) {
     enemyMove = Math.random() < 0.7 ? "basic" : "ultimate";
@@ -66,7 +68,7 @@ export async function playerAction(
     const enemyDmgBonus = enemyMove === "basic" ? enemy.basicDamageBonus : enemy.ultimateDamageBonus;
     const effectiveDef = guardActive ? PLAYER_DEF * 2 : PLAYER_DEF;
     enemyDamageDealt = calculateDamage(enemyMultiplier, enemy.atk, enemyDmgBonus, effectiveDef);
-    newPlayerHp = Math.max(0, battle.playerHp - enemyDamageDealt);
+    newPlayerHp = Math.max(0, playerHpAfterHeal - enemyDamageDealt);
   }
 
   // Resolve outcome
@@ -82,7 +84,7 @@ export async function playerAction(
   }
 
   const updatedBattle = await battleRepository.update(battleId, {
-    playerHp: Math.min(PLAYER_MAX_HP, newPlayerHp + playerHpRestored),
+    playerHp: newPlayerHp,
     enemyHp: newEnemyHp,
     isComplete,
     playerWon,
