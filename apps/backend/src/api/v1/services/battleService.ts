@@ -13,7 +13,7 @@ const PLAYER_ACTIONS = {
 } as const;
 
 export async function startBattle(userId: string, enemyId: number): Promise<Battle> {
-  const existing = await battleRepository.findIncompleteByUserId(userId);
+  const existing = await battleRepository.findIncompleteByUserId(userId, enemyId);
   if (existing) return existing;
 
   const enemy = await enemyRepository.getById(enemyId);

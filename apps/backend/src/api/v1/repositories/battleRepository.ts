@@ -5,14 +5,14 @@ class BattleRepository {
   private useDatabase = Boolean(process.env.DB_URL);
   private battles: Map<string, Battle> = new Map();
 
-  async findIncompleteByUserId(userId: string): Promise<Battle | null> {
+  async findIncompleteByUserId(userId: string, enemyId: number): Promise<Battle | null> {
     if (!this.useDatabase) {
       for (const battle of this.battles.values()) {
-        if (battle.userId === userId && !battle.isComplete) return { ...battle };
+        if (battle.userId === userId && battle.enemyId === enemyId && !battle.isComplete) return { ...battle };
       }
       return null;
     }
-    return prisma.battle.findFirst({ where: { userId, isComplete: false } });
+    return prisma.battle.findFirst({ where: { userId, enemyId, isComplete: false } });
   }
 
   async create(data: { userId: string; enemyId: number; playerHp: number; enemyHp: number }): Promise<Battle> {
