@@ -12,6 +12,7 @@ function BattleScreen() {
         isActing,
         isComplete,
         messages,
+        currentFight,
         submitAction,
     } = useBattle();
  
@@ -24,6 +25,11 @@ function BattleScreen() {
  
     return (
         <div className="battle-screen">
+ 
+            {/* Floor counter */}
+            <div style={{ display: "flex", justifyContent: "flex-end", padding: "0.25rem 0.75rem", background: "#1a1a1a", color: "#f5deb3", fontWeight: "bold", fontSize: "0.85rem" }}>
+                Floor {currentFight}
+            </div>
  
             {/* ── TOP HALF: battle area ── */}
             <div className="battle-area">

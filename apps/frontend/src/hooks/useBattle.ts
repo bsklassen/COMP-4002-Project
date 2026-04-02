@@ -23,6 +23,7 @@ export function useBattle() {
   const [isComplete, setIsComplete] = useState(false);
   const [playerWon, setPlayerWon] = useState<boolean | null>(null);
   const [messages, setMessages] = useState<BattleLogMessage[]>([]);
+  const [currentFight, setCurrentFight] = useState(1);
 
   function appendMessage(type: BattleLogMessage["type"], text: string) {
     setMessages((prev) => [
@@ -43,6 +44,7 @@ export function useBattle() {
         const loadedBattle = await battleService.startBattle(loadedEnemy.id, userId);
 
         if (cancelled) return;
+        setCurrentFight(save.currentFight);
         setEnemy(loadedEnemy);
         setBattle(loadedBattle);
         setPlayerHp(loadedBattle.playerHp);
@@ -90,8 +92,11 @@ export function useBattle() {
 
       if (result.isComplete) {
         if (result.playerWon) {
-          appendMessage("system", "Victory! The enemy has been defeated.");
-          navigate("/victory", { state: { enemyName: enemy?.name ?? "Enemy" } });
+          const defeatedName = enemy?.name ?? "Enemy";
+          appendMessage("system", `You defeated ${defeatedName}!\nMoving to the next floor...`);
+          setTimeout(() => {
+            navigate("/victory", { state: { enemyName: defeatedName } });
+          }, DEFEAT_DELAY_MS);
         } else {
           appendMessage("system", "You were defeated!\nStarting on floor 1 again.");
           setTimeout(async () => {
@@ -117,6 +122,7 @@ export function useBattle() {
     isComplete,
     playerWon,
     messages,
+    currentFight,
     submitAction,
   };
 }
