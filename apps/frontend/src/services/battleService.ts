@@ -29,6 +29,7 @@ export type Battle = {
 export type BattleActionResult = {
   battle: Battle;
   playerDamageDealt: number;
+  playerHpRestored?: number;
   enemyMove?: "basic" | "ultimate";
   enemyDamageDealt?: number;
   isComplete: boolean;

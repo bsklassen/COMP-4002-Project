@@ -6,10 +6,12 @@ import type { Battle, BattleActionResult } from "../types/Battle.js";
 const PLAYER_ATK = 50;
 const PLAYER_DEF = 30;
 
+const PLAYER_MAX_HP = 100;
+const HEAL_AMOUNT = Math.floor(PLAYER_MAX_HP * 0.33);
+
 const PLAYER_ACTIONS = {
   attack: { skillMultiplier: 1.0, damageBonus: 1.0 },
   skill:  { skillMultiplier: 1.4, damageBonus: 1.1 },
-  skill2: { skillMultiplier: 1.2, damageBonus: 1.2 },
 } as const;
 
 export async function startBattle(userId: string, enemyId: number): Promise<Battle> {
@@ -29,7 +31,7 @@ export async function startBattle(userId: string, enemyId: number): Promise<Batt
 
 export async function playerAction(
   battleId: string,
-  action: "attack" | "skill" | "skill2" | "guard"
+  action: "attack" | "skill" | "heal" | "guard"
 ): Promise<BattleActionResult> {
   const battle = await battleRepository.getById(battleId);
   if (!battle) throw new Error("Battle not found");
@@ -39,12 +41,17 @@ export async function playerAction(
   if (!enemy) throw new Error("Enemy not found");
 
   const guardActive = action === "guard";
+  const healActive = action === "heal";
 
   // Player turn
   let playerDamageDealt = 0;
-  if (!guardActive) {
-    const { skillMultiplier, damageBonus } = PLAYER_ACTIONS[action];
+  let playerHpRestored = 0;
+  if (!guardActive && !healActive) {
+    const { skillMultiplier, damageBonus } = PLAYER_ACTIONS[action as keyof typeof PLAYER_ACTIONS];
     playerDamageDealt = calculateDamage(skillMultiplier, PLAYER_ATK, damageBonus, enemy.def);
+  }
+  if (healActive) {
+    playerHpRestored = Math.min(HEAL_AMOUNT, PLAYER_MAX_HP - battle.playerHp);
   }
   const newEnemyHp = Math.max(0, battle.enemyHp - playerDamageDealt);
 
@@ -75,7 +82,7 @@ export async function playerAction(
   }
 
   const updatedBattle = await battleRepository.update(battleId, {
-    playerHp: newPlayerHp,
+    playerHp: Math.min(PLAYER_MAX_HP, newPlayerHp + playerHpRestored),
     enemyHp: newEnemyHp,
     isComplete,
     playerWon,
@@ -87,6 +94,10 @@ export async function playerAction(
     isComplete,
     playerWon,
   };
+
+  if (playerHpRestored > 0) {
+    result.playerHpRestored = playerHpRestored;
+  }
 
   if (newEnemyHp > 0) {
     result.enemyMove = enemyMove;

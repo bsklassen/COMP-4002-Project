@@ -63,7 +63,7 @@ export function useBattle() {
     return () => { cancelled = true; };
   }, [userId]);
 
-  async function submitAction(action: "attack" | "skill" | "skill2" | "guard") {
+  async function submitAction(action: "attack" | "skill" | "heal" | "guard") {
     if (!battle || isActing || isComplete) return;
     setIsActing(true);
 
@@ -80,9 +80,10 @@ export function useBattle() {
       setPlayerWon(result.playerWon);
       setBattle(result.battle);
 
-      if (action !== "guard") {
-        const actionLabel =
-          action === "attack" ? "Attack" : action === "skill" ? "Skill" : "Skill 2";
+      if (action === "heal") {
+        appendMessage("ally", `[Player] used Heal → restored ${result.playerHpRestored ?? 0} HP`);
+      } else if (action !== "guard") {
+        const actionLabel = action === "attack" ? "Attack" : "Skill";
         appendMessage("ally", `[Player] used ${actionLabel} → dealt ${result.playerDamageDealt} damage`);
       }
 
