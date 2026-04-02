@@ -7,6 +7,7 @@ import battleLogRoutes from "./api/v1/routes/battleLogRoutes.js";
 import itemRoutes from "./api/v1/routes/itemRoutes.js";
 import enemyRoutes from "./api/v1/routes/enemyRoutes.js";
 import userSaveRoutes from "./api/v1/routes/userSaveRoutes.js";
+import battleRoutes from "./api/v1/routes/battleRoutes.js";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/api/v1", battleLogRoutes);
 app.use("/api/v1/victory", itemRoutes);
 app.use("/api/v1/enemies", enemyRoutes);
 app.use("/api/v1/save", userSaveRoutes);
+app.use("/api/v1/battles", battleRoutes);
 
 // Fallback
 app.use((req, res) => {
