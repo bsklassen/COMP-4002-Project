@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import type { BattleLogMessage } from "../types/BattleLogMessage";
 import * as battleService from "../services/battleService";
-import type { Battle, Enemy } from "../services/battleService";
+import type { Battle, Enemy, ActiveBuff } from "../services/battleService";
 import { useUser } from "../components/common/usercontext/UserContext";
 
 const DEFEAT_DELAY_MS = 5000;
@@ -24,6 +24,7 @@ export function useBattle() {
   const [playerWon, setPlayerWon] = useState<boolean | null>(null);
   const [messages, setMessages] = useState<BattleLogMessage[]>([]);
   const [currentFight, setCurrentFight] = useState(1);
+  const [activeBuffs, setActiveBuffs] = useState<ActiveBuff[]>([]);
 
   function appendMessage(type: BattleLogMessage["type"], text: string) {
     setMessages((prev) => [
@@ -51,6 +52,7 @@ export function useBattle() {
         setEnemyHp(loadedBattle.enemyHp);
         setIsComplete(loadedBattle.isComplete);
         setPlayerWon(loadedBattle.playerWon);
+        setActiveBuffs(loadedBattle.activeBuffs ?? []);
         appendMessage("system", `A wild ${loadedEnemy.name} appears!`);
       } catch (err) {
         if (!cancelled) appendMessage("system", `Failed to load battle: ${err}`);
@@ -69,7 +71,9 @@ export function useBattle() {
 
     try {
       if (action === "guard") {
-        appendMessage("ally", "[Player] is guarding!");
+        const existing = activeBuffs.find((b) => b.name === "Guard");
+        const turns = existing ? 3 : 3; // always refreshes to 3
+        appendMessage("ally", `[Player] used Guard! DEF +30% for ${turns} turns.`);
       }
 
       const result = await battleService.playerAction(battle.id, action);
@@ -79,6 +83,7 @@ export function useBattle() {
       setIsComplete(result.isComplete);
       setPlayerWon(result.playerWon);
       setBattle(result.battle);
+      setActiveBuffs(result.battle.activeBuffs ?? []);
 
       if (action === "heal") {
         appendMessage("ally", `[Player] used Heal → restored ${result.playerHpRestored ?? 0} HP`);
@@ -126,6 +131,7 @@ export function useBattle() {
     playerWon,
     messages,
     currentFight,
+    activeBuffs,
     submitAction,
   };
 }

@@ -13,6 +13,7 @@ function BattleScreen() {
         isComplete,
         messages,
         currentFight,
+        activeBuffs,
         submitAction,
     } = useBattle();
  
@@ -26,9 +27,16 @@ function BattleScreen() {
     return (
         <div className="battle-screen">
  
-            {/* Floor counter */}
-            <div style={{ display: "flex", justifyContent: "flex-end", padding: "0.25rem 0.75rem", background: "#1a1a1a", color: "#f5deb3", fontWeight: "bold", fontSize: "0.85rem" }}>
-                Floor {currentFight}
+            {/* Floor counter + active buffs */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.25rem 0.75rem", background: "#1a1a1a", color: "#f5deb3", fontWeight: "bold", fontSize: "0.85rem" }}>
+                <div style={{ display: "flex", gap: "0.5rem" }}>
+                    {activeBuffs.map((buff) => (
+                        <span key={buff.name + buff.target} style={{ background: "#2a4a2a", border: "1px solid #4a8a4a", borderRadius: "4px", padding: "0.1rem 0.4rem", fontSize: "0.75rem", color: "#90ee90" }}>
+                            {buff.name} ({buff.affectedStat.toUpperCase()} {buff.value >= 1 ? `+${Math.round((buff.value - 1) * 100)}%` : `-${Math.round((1 - buff.value) * 100)}%`}) {buff.turnsRemaining}T
+                        </span>
+                    ))}
+                </div>
+                <span>Floor {currentFight}</span>
             </div>
  
             {/* ── TOP HALF: battle area ── */}

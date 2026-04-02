@@ -1,9 +1,18 @@
-import type { Battle } from "../types/Battle.js";
+import type { Battle, ActiveBuff } from "../types/Battle.js";
 import prisma from "../../../../prisma/client.js";
 
 class BattleRepository {
   private useDatabase = Boolean(process.env.DB_URL);
   private battles: Map<string, Battle> = new Map();
+
+  private fromDB(raw: any): Battle {
+    return {
+      ...raw,
+      activeBuffs: Array.isArray(raw.activeBuffs)
+        ? (raw.activeBuffs as ActiveBuff[])
+        : [],
+    };
+  }
 
   async findIncompleteByUserId(userId: string, enemyId: number): Promise<Battle | null> {
     if (!this.useDatabase) {
@@ -12,7 +21,8 @@ class BattleRepository {
       }
       return null;
     }
-    return prisma.battle.findFirst({ where: { userId, enemyId, isComplete: false } });
+    const raw = await prisma.battle.findFirst({ where: { userId, enemyId, isComplete: false } });
+    return raw ? this.fromDB(raw) : null;
   }
 
   async create(data: { userId: string; enemyId: number; playerHp: number; enemyHp: number }): Promise<Battle> {
@@ -22,6 +32,7 @@ class BattleRepository {
         id: crypto.randomUUID(),
         playerWon: null,
         isComplete: false,
+        activeBuffs: [],
         createdAt: now,
         updatedAt: now,
         ...data,
@@ -29,19 +40,21 @@ class BattleRepository {
       this.battles.set(battle.id, battle);
       return { ...battle };
     }
-    return prisma.battle.create({ data });
+    const raw = await prisma.battle.create({ data: { ...data, activeBuffs: [] } });
+    return this.fromDB(raw);
   }
 
   async getById(id: string): Promise<Battle | null> {
     if (!this.useDatabase) {
       return this.battles.get(id) ?? null;
     }
-    return prisma.battle.findUnique({ where: { id } });
+    const raw = await prisma.battle.findUnique({ where: { id } });
+    return raw ? this.fromDB(raw) : null;
   }
 
   async update(
     id: string,
-    data: Partial<Pick<Battle, "playerHp" | "enemyHp" | "isComplete" | "playerWon">>
+    data: Partial<Pick<Battle, "playerHp" | "enemyHp" | "isComplete" | "playerWon" | "activeBuffs">>
   ): Promise<Battle> {
     if (!this.useDatabase) {
       const existing = this.battles.get(id);
@@ -50,7 +63,11 @@ class BattleRepository {
       this.battles.set(id, updated);
       return { ...updated };
     }
-    return prisma.battle.update({ where: { id }, data });
+    const { activeBuffs, ...rest } = data;
+    const prismaData: any = { ...rest };
+    if (activeBuffs !== undefined) prismaData.activeBuffs = activeBuffs;
+    const raw = await prisma.battle.update({ where: { id }, data: prismaData });
+    return this.fromDB(raw);
   }
 }
 

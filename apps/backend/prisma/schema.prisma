@@ -67,6 +67,7 @@ model Battle {
   enemyId     Int
   playerHp    Int
   enemyHp     Int
+  activeBuffs Json     @default("[]")
   isComplete  Boolean  @default(false)
   playerWon   Boolean?
   createdAt   DateTime @default(now())
