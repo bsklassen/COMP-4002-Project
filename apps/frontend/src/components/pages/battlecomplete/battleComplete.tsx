@@ -1,9 +1,10 @@
 import './battleComplete.css'
+import { useNavigate } from 'react-router-dom';
 import { useDroppedItems } from "../../../hooks/useDroppedItems";
 
 function BattleComplete() {
     // placeholder data
-
+    const navigate = useNavigate();
     const experienceGained = 150
     const goldEarned = 312980
         const { itemsDiscarded, setItemsDiscarded, 
@@ -97,7 +98,7 @@ function BattleComplete() {
                             <p className='baggedGoods'>Best be on your way.</p>
                         </div>
                     )}
-                    <button className="continueButton">continue</button>
+                    <button className="continueButton" onClick={() => navigate('/battle')}>continue</button>
                 </div>
             </div>
         </div>

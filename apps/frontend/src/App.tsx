@@ -6,6 +6,7 @@ import Login from "./components/pages/Login/Login";
 import BattleScreen from "./components/pages/battlescreen/Battlescreen";
 import { UserProvider } from "./components/common/usercontext/UserContext";
 import BattleComplete from "./components/pages/battlecomplete/battleComplete";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 import "./App.css";
 
 function App() {
@@ -19,8 +20,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/battle" element={<BattleScreen />} />
-            <Route path="/victory" element={<BattleComplete />} />
+            <Route path="/battle" element={<ProtectedRoute><BattleScreen /></ProtectedRoute>} />
+            <Route path="/victory" element={<ProtectedRoute><BattleComplete /></ProtectedRoute>} />
           </Routes>
         </div>
       </main>
