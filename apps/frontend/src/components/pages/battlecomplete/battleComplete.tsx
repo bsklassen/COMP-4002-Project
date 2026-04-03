@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDroppedItems } from "../../../hooks/useDroppedItems";
 import { advanceFight } from '../../../services/battleService';
+import { removeUserItem } from '../../../apis/itemApi';
 import { useUser } from '../../common/usercontext/UserContext';
 
 function BattleComplete() {
@@ -18,7 +19,7 @@ function BattleComplete() {
             discardConfirmation, setDiscardConfirmation,
             itemsKept, setItemsKept,
             itemsDropped, setItemsDropped
-        } = useDroppedItems();
+        } = useDroppedItems(userId ?? null);
 
     const isItemSelected = (itemId: number) => {
         return selectedItems.filter(selectedItem => selectedItem.id === itemId).length > 0
@@ -87,6 +88,12 @@ function BattleComplete() {
                                     setItemsDropped(oldList =>
                                         oldList.filter(item => !isItemSelected(item.id))
                                     )
+                                    // Remove discarded items from DB inventory
+                                    if (userId) {
+                                        selectedItems.forEach((item) => {
+                                            void removeUserItem(userId, item.id);
+                                        });
+                                    }
                                     setSelectedItems([])
                                     setItemsKept(true)
                                     setDiscardConfirmation(false)
@@ -109,7 +116,7 @@ function BattleComplete() {
                             <p className='baggedGoods'>Best be on your way.</p>
                         </div>
                     )}
-                    <button className="continueButton" onClick={() => navigate('/battle')}>continue</button>
+                    <button className="continueButton" onClick={() => navigate('/battle', { state: { resetKey: Date.now() } })}>continue</button>
                 </div>
             </div>
         </div>

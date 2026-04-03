@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import type { BattleLogMessage } from "../types/BattleLogMessage";
+import type { Item } from "../types/items";
 import * as battleService from "../services/battleService";
 import type { Battle, Enemy, ActiveBuff } from "../services/battleService";
 import { useUser } from "../components/common/usercontext/UserContext";
+import { clearUserItems, getUserItems, removeUserItem } from "../apis/itemApi";
 
 const DEFEAT_DELAY_MS = 5000;
 
@@ -25,6 +27,7 @@ export function useBattle() {
   const [messages, setMessages] = useState<BattleLogMessage[]>([]);
   const [currentFight, setCurrentFight] = useState(1);
   const [activeBuffs, setActiveBuffs] = useState<ActiveBuff[]>([]);
+  const [inventory, setInventory] = useState<Item[]>([]);
 
   function appendMessage(type: BattleLogMessage["type"], text: string) {
     setMessages((prev) => [
@@ -54,6 +57,12 @@ export function useBattle() {
         setPlayerWon(loadedBattle.playerWon);
         setActiveBuffs(loadedBattle.activeBuffs ?? []);
         appendMessage("system", `A wild ${loadedEnemy.name} appears!`);
+
+        // Load inventory in parallel — non-fatal if it fails
+        try {
+          const items = await getUserItems(userId);
+          if (!cancelled) setInventory(items);
+        } catch { /* inventory unavailable */ }
       } catch (err) {
         if (!cancelled) appendMessage("system", `Failed to load battle: ${err}`);
       } finally {
@@ -64,6 +73,52 @@ export function useBattle() {
     void init();
     return () => { cancelled = true; };
   }, [userId]);
+
+  // Shared result handler used by both submitAction and usePotion
+  function handleResult(result: Awaited<ReturnType<typeof battleService.playerAction>>, action: string, itemLabel?: string) {
+    setPlayerHp(result.battle.playerHp);
+    setEnemyHp(result.battle.enemyHp);
+    setIsComplete(result.isComplete);
+    setPlayerWon(result.playerWon);
+    setBattle(result.battle);
+    setActiveBuffs(result.battle.activeBuffs ?? []);
+
+    if (itemLabel) {
+      appendMessage("ally", `[Player] used ${itemLabel} → restored ${result.playerHpRestored ?? 0} HP`);
+    } else if (action === "heal") {
+      appendMessage("ally", `[Player] used Heal → restored ${result.playerHpRestored ?? 0} HP`);
+    } else if (action !== "guard") {
+      const actionLabel = action === "attack" ? "Attack" : "Skill";
+      appendMessage("ally", `[Player] used ${actionLabel} → dealt ${result.playerDamageDealt} damage`);
+    }
+
+    if (result.enemyMove !== undefined) {
+      const enemyMoveLabel = result.enemyMove === "basic" ? "Basic Attack" : "Ultimate";
+      const eName = enemy?.name ?? "Enemy";
+      appendMessage("enemy", `[${eName}] used ${enemyMoveLabel} → dealt ${result.enemyDamageDealt} damage`);
+    }
+
+    if (result.isComplete) {
+      if (result.playerWon) {
+        const defeatedName = enemy?.name ?? "Enemy";
+        appendMessage("system", `You defeated ${defeatedName}!\nMoving to the next floor...`);
+        setTimeout(() => {
+          navigate("/victory", { state: { enemyName: defeatedName } });
+        }, DEFEAT_DELAY_MS);
+      } else {
+        appendMessage("system", "You were defeated!\nStarting on floor 1 again.");
+        setTimeout(async () => {
+          if (userId) {
+            await Promise.all([
+              battleService.resetSave(userId),
+              clearUserItems(userId),
+            ]);
+          }
+          navigate("/battle", { replace: true, state: { resetKey: Date.now() } });
+        }, DEFEAT_DELAY_MS);
+      }
+    }
+  }
 
   async function submitAction(action: "attack" | "skill" | "heal" | "guard") {
     if (!battle || isActing || isComplete) return;
@@ -77,42 +132,34 @@ export function useBattle() {
       }
 
       const result = await battleService.playerAction(battle.id, action);
+      handleResult(result, action);
+    } catch (err) {
+      appendMessage("system", `Error: ${err}`);
+    } finally {
+      setIsActing(false);
+    }
+  }
 
-      setPlayerHp(result.battle.playerHp);
-      setEnemyHp(result.battle.enemyHp);
-      setIsComplete(result.isComplete);
-      setPlayerWon(result.playerWon);
-      setBattle(result.battle);
-      setActiveBuffs(result.battle.activeBuffs ?? []);
+  async function usePotion(potionLabel: string, itemName: string) {
+    if (!battle || isActing || isComplete || !userId) return;
 
-      if (action === "heal") {
-        appendMessage("ally", `[Player] used Heal → restored ${result.playerHpRestored ?? 0} HP`);
-      } else if (action !== "guard") {
-        const actionLabel = action === "attack" ? "Attack" : "Skill";
-        appendMessage("ally", `[Player] used ${actionLabel} → dealt ${result.playerDamageDealt} damage`);
-      }
+    const item = inventory.find((i) => i.name === itemName);
+    if (!item) {
+      appendMessage("system", `You don't have a ${potionLabel}!`);
+      return;
+    }
 
-      if (result.enemyMove !== undefined) {
-        const enemyMoveLabel = result.enemyMove === "basic" ? "Basic Attack" : "Ultimate";
-        const eName = enemy?.name ?? "Enemy";
-        appendMessage("enemy", `[${eName}] used ${enemyMoveLabel} → dealt ${result.enemyDamageDealt} damage`);
-      }
-
-      if (result.isComplete) {
-        if (result.playerWon) {
-          const defeatedName = enemy?.name ?? "Enemy";
-          appendMessage("system", `You defeated ${defeatedName}!\nMoving to the next floor...`);
-          setTimeout(() => {
-            navigate("/victory", { state: { enemyName: defeatedName } });
-          }, DEFEAT_DELAY_MS);
-        } else {
-          appendMessage("system", "You were defeated!\nStarting on floor 1 again.");
-          setTimeout(async () => {
-            if (userId) await battleService.resetSave(userId);
-            navigate("/battle", { replace: true, state: { resetKey: Date.now() } });
-          }, DEFEAT_DELAY_MS);
-        }
-      }
+    setIsActing(true);
+    try {
+      await removeUserItem(userId, item.id);
+      // Remove one copy from local inventory
+      setInventory((prev) => {
+        const idx = prev.findIndex((i) => i.id === item.id);
+        if (idx === -1) return prev;
+        return [...prev.slice(0, idx), ...prev.slice(idx + 1)];
+      });
+      const result = await battleService.playerAction(battle.id, "heal");
+      handleResult(result, "heal", potionLabel);
     } catch (err) {
       appendMessage("system", `Error: ${err}`);
     } finally {
@@ -132,6 +179,8 @@ export function useBattle() {
     messages,
     currentFight,
     activeBuffs,
+    inventory,
     submitAction,
+    usePotion,
   };
 }

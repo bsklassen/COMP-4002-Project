@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getItems, grantItems } from "../apis/itemApi";
-import type { Item } from "../types/items.ts"
+import type { Item } from "../types/items"
 
 
 export function useDroppedItems(userId: string | null) {
@@ -21,14 +21,16 @@ export function useDroppedItems(userId: string | null) {
             try {
                 const allItems = await getItems();
                 if (cancelled) return;
+                // Pick 2 or 3 random items to drop
                 const dropCount = Math.random() < 0.5 ? 2 : 3;
                 const dropped = [...allItems]
                     .sort(() => Math.random() - 0.5)
                     .slice(0, dropCount);
                 setItemsDropped(dropped);
+                // Persist to DB so inventory is available next battle
                 await grantItems(uid, dropped.map((i) => i.id));
             } catch {
-                // Non-fatal
+                // Non-fatal: victory screen still works, inventory may be empty
             }
         }
 

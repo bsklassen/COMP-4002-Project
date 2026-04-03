@@ -14,7 +14,9 @@ function BattleScreen() {
         messages,
         currentFight,
         activeBuffs,
+        inventory,
         submitAction,
+        usePotion,
     } = useBattle();
  
     // Get the last message for action description
@@ -73,7 +75,12 @@ function BattleScreen() {
             <div className="battle-ui">
  
                 {/* Left 50%: 2x2 button grid */}
-                <MovesPanel onAction={submitAction} disabled={isLoading || isActing || isComplete} />
+                <MovesPanel
+                    onAction={submitAction}
+                    onUsePotion={usePotion}
+                    inventory={inventory.map((i) => i.name)}
+                    disabled={isLoading || isActing || isComplete}
+                />
  
                 {/* Right 50%: action desc + log side by side */}
                 <div className="battle-info">
