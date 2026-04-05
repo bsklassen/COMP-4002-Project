@@ -12,7 +12,7 @@ export async function getAllEnemies(req: Request, res: Response, next: NextFunct
 
 export async function getEnemyByOrder(req: Request, res: Response, next: NextFunction) {
   try {
-    const order = parseInt(req.params.order, 10);
+    const order = parseInt(req.params.order as string, 10);
     if (isNaN(order)) return res.status(400).json({ error: "Invalid order parameter" });
     const enemy = await enemyService.getEnemyByOrder(order);
     if (!enemy) return res.status(404).json({ error: "Enemy not found" });
