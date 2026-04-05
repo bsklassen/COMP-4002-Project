@@ -12,7 +12,7 @@ const HEAL_AMOUNT = Math.floor(PLAYER_MAX_HP * 0.33);
 
 const PLAYER_ACTIONS = {
   attack: { skillMultiplier: 1.0, damageBonus: 1.0 },
-  skill:  { skillMultiplier: 1.4, damageBonus: 1.1 },
+  skill:  { skillMultiplier: 2.0, damageBonus: 1.0 },
 } as const;
 
 const GUARD_BUFF: ActiveBuff = {

@@ -1,9 +1,13 @@
 import BattleLog from "./Battlelog";
 import MovesPanel from "./MovesPanel";
 import { useBattle } from "../../../hooks/useBattle";
+import { useUser } from "../../common/usercontext/UserContext";
 import "./BattleScreen.css";
+
+const ALLY_IMAGE = "/images/ally/player.png";
  
 function BattleScreen() {
+    const { username } = useUser();
     const {
         enemy,
         playerHp,
@@ -47,8 +51,8 @@ function BattleScreen() {
                 {/* Ally side */}
                 <div className="ally-side">
                     <div className="combatant-container">
-                        <div className="ally-sprite">A</div>
-                        <div className="combatant-name">Ally</div>
+                        <img src={ALLY_IMAGE} alt={username ?? "Ally"} className="ally-sprite" />
+                        <div className="combatant-name">{username ?? "Ally"}</div>
                         <div className="health-bar-container">
                             <div className="health-bar-fill" style={{ width: `${playerHpPct}%` }} />
                         </div>

@@ -46,9 +46,22 @@ class EnemyRepository {
   async getByOrder(order: number): Promise<Enemy | null> {
     await this.ensureSeeded();
     if (!this.useDatabase) {
-      return this.enemies.find((e) => e.order === order) ?? null;
+      const direct = this.enemies.find((e) => e.order === order);
+      if (direct) return direct;
+      // For floors beyond seed count, deterministically pick from the pool
+      // using a simple hash so the same floor always returns the same enemy.
+      const count = this.enemies.length;
+      if (count === 0) return null;
+      const idx = ((order * 1664525 + 1013904223) >>> 0) % count;
+      return { ...this.enemies[idx] };
     }
-    return prisma.enemy.findUnique({ where: { order } });
+    const raw = await prisma.enemy.findUnique({ where: { order } });
+    if (raw) return raw;
+    // For floors beyond seed count, deterministically pick from the pool.
+    const all = await prisma.enemy.findMany({ orderBy: { id: "asc" } });
+    if (all.length === 0) return null;
+    const idx = ((order * 1664525 + 1013904223) >>> 0) % all.length;
+    return all[idx];
   }
 }
 
