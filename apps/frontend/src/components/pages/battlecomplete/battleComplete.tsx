@@ -1,9 +1,17 @@
 import './battleComplete.css'
+import { useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDroppedItems } from "../../../hooks/useDroppedItems";
+import { advanceFight } from '../../../services/battleService';
+import { removeUserItem } from '../../../apis/itemApi';
+import { useUser } from '../../common/usercontext/UserContext';
 
 function BattleComplete() {
     // placeholder data
-
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { userId } = useUser();
+    const enemyName = (location.state as { enemyName?: string } | null)?.enemyName ?? "Enemy";
     const experienceGained = 150
     const goldEarned = 312980
         const { itemsDiscarded, setItemsDiscarded, 
@@ -11,17 +19,22 @@ function BattleComplete() {
             discardConfirmation, setDiscardConfirmation,
             itemsKept, setItemsKept,
             itemsDropped, setItemsDropped
-        } = useDroppedItems();
+        } = useDroppedItems(userId ?? null);
 
     const isItemSelected = (itemId: number) => {
         return selectedItems.filter(selectedItem => selectedItem.id === itemId).length > 0
     }
+
+    useEffect(() => {
+        if (userId) void advanceFight(userId);
+    }, [userId]);
     
     return(
         <div className="postBattleOverlay">
             <div className="postBattleModal">
                 {/* <h1>{victoryAchieved ? "VICTORY!" : "DEFEAT"}</h1> */}
                 <h1>VICTORY!</h1>
+                <p>You defeated {enemyName}!</p>
                 <p>Experience gained: {experienceGained}</p>
                 <p>Gold Earned: {goldEarned}</p>
                 <div>
@@ -75,6 +88,12 @@ function BattleComplete() {
                                     setItemsDropped(oldList =>
                                         oldList.filter(item => !isItemSelected(item.id))
                                     )
+                                    // Remove discarded items from DB inventory
+                                    if (userId) {
+                                        selectedItems.forEach((item) => {
+                                            void removeUserItem(userId, item.id);
+                                        });
+                                    }
                                     setSelectedItems([])
                                     setItemsKept(true)
                                     setDiscardConfirmation(false)
@@ -97,7 +116,7 @@ function BattleComplete() {
                             <p className='baggedGoods'>Best be on your way.</p>
                         </div>
                     )}
-                    <button className="continueButton">continue</button>
+                    <button className="continueButton" onClick={() => navigate('/battle', { state: { resetKey: Date.now() } })}>continue</button>
                 </div>
             </div>
         </div>

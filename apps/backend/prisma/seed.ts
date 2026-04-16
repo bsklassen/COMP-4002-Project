@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { USERS, ITEMS, USER_ITEMS, BATTLE_LOG_MESSAGES } from "./seedData.js";
+import { USERS, ITEMS, USER_ITEMS, BATTLE_LOG_MESSAGES, ENEMIES } from "./seedData.js";
 
 const prisma = new PrismaClient();
 
@@ -10,8 +10,17 @@ async function main() {
     // clear tables (order matters for FK constraints)
     await prisma.battleLogMessage.deleteMany();
     await prisma.userItem.deleteMany();
+    await prisma.battle.deleteMany();
+    await prisma.userSave.deleteMany();
     await prisma.item.deleteMany();
     await prisma.user.deleteMany();
+    await prisma.enemy.deleteMany();
+
+    // seed enemies
+    for (const enemy of ENEMIES) {
+        await prisma.enemy.create({ data: enemy });
+    }
+    console.log(`CREATED ${ENEMIES.length} ENEMIES`);
 
     // seed items
     for (const item of ITEMS) {

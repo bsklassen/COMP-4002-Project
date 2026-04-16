@@ -1,18 +1,42 @@
 // manages state, calls service, calls repo, component only talks to this thing
 
-import { useState } from "react";
-import * as itemServices from "../services/itemServices";
+import { useState, useEffect } from "react";
+import { getItems, grantItems } from "../apis/itemApi";
 import type { Item } from "../types/items"
 
 
-export function useDroppedItems() {
+export function useDroppedItems(userId: string | null) {
     const[itemsDiscarded, setItemsDiscarded] = useState<Item[]>([])
     const[selectedItems, setSelectedItems] = useState<Item[]>([])
     const[discardConfirmation, setDiscardConfirmation] = useState(false)
     const[itemsKept, setItemsKept] = useState(false)
-    const [itemsDropped, setItemsDropped] = useState<Item[]>(
-        itemServices.droppedItemRandomizer()
-    );
+    const [itemsDropped, setItemsDropped] = useState<Item[]>([]);
+
+    useEffect(() => {
+        if (!userId) return;
+        const uid = userId; // capture non-null for async closure
+        let cancelled = false;
+
+        async function fetchAndGrant() {
+            try {
+                const allItems = await getItems();
+                if (cancelled) return;
+                // Pick 2 or 3 random items to drop
+                const dropCount = Math.random() < 0.5 ? 2 : 3;
+                const dropped = [...allItems]
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, dropCount);
+                setItemsDropped(dropped);
+                // Persist to DB so inventory is available next battle
+                await grantItems(uid, dropped.map((i) => i.id));
+            } catch {
+                // Non-fatal: victory screen still works, inventory may be empty
+            }
+        }
+
+        void fetchAndGrant();
+        return () => { cancelled = true; };
+    }, [userId]);
 
     return {itemsDiscarded, setItemsDiscarded, 
             selectedItems, setSelectedItems, 
@@ -20,4 +44,3 @@ export function useDroppedItems() {
             itemsKept, setItemsKept,
             itemsDropped, setItemsDropped}
 }
-    
