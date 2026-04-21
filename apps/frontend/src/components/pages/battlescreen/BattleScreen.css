@@ -103,33 +103,33 @@
     grid-template-rows: auto auto;
     gap: 8px;
     padding: 12px;
-    background: #1a1a1a;
-    border-right: 2px solid #666;
+    background: #1e2a3a;
+    border-right: 2px solid #2a3a4a;
     justify-content: center;
     align-content: center;
 }
- 
+
 .move-button {
-    width: 280px;
-    height: 140px;
-    background: #3a3a3a;
-    color: white;
-    border: 2px solid #666;
+    width: 200px;
+    height: 100px;
+    background-image: url('/images/assets/action-button.png');
+    background-size: 100%;
+    color: #efe3c7;
+    border: none;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
-    transition: background 0.2s;
+    border-radius: 0;
+    transition: opacity 0.2s;
 }
- 
+
 .move-button:hover {
-    background: #4a4a4a;
-    border-color: #888;
+    opacity: 0.85;
+    border-color: transparent;
 }
- 
 /* action desc + log side by side */
 .battle-info {
     flex: 1;
