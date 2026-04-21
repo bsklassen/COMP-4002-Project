@@ -8,10 +8,6 @@ function Header() {
         <NavLink to="/" style={{ color: "white" }}>Home</NavLink>
         <NavLink to="/battle" style={{ color: "white" }}>BattleScreen</NavLink>
         <NavLink to="/victory" style={{ color: "white" }}>Victory</NavLink>
-        {/* Only show when signed in */}
-        <SignedIn>
-          <NavLink to="/battle" style={{ color: "white" }}>Play</NavLink>
-        </SignedIn>
       </nav>
  
       {/* Clerk auth components */}

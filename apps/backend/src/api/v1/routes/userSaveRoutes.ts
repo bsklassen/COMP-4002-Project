@@ -4,8 +4,8 @@ import { findOrCreateUser } from "../middleware/findOrCreateUser.js";
 
 const router = Router();
 
-router.get("/", controller.getUserSave);
-router.post("/advance", controller.advanceFight);
-router.post("/reset", controller.resetSave);
+router.get("/", findOrCreateUser, controller.getUserSave);
+router.post("/advance", findOrCreateUser, controller.advanceFight);
+router.post("/reset", findOrCreateUser, controller.resetSave);
 
 export default router;

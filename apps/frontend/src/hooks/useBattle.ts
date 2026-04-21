@@ -14,7 +14,7 @@ function nextId() { return _msgIdCounter++; }
 
 export function useBattle() {
   const navigate = useNavigate();
-  const { userId } = useAuth();
+  const { userId, getToken } = useAuth();
 
   const [enemy, setEnemy] = useState<Enemy | null>(null);
   const [battle, setBattle] = useState<Battle | null>(null);
@@ -43,9 +43,11 @@ export function useBattle() {
       setIsLoading(true);
       try {
         if (!userId) throw new Error("Not logged in");
-        const save = await battleService.getUserSave(userId);
+        const token = await getToken();
+        if (!token) throw new Error("No session token");
+        const save = await battleService.getUserSave(token);
         const loadedEnemy = await battleService.getEnemyByOrder(save.currentFight);
-        const loadedBattle = await battleService.startBattle(loadedEnemy.id, userId);
+        const loadedBattle = await battleService.startBattle(loadedEnemy.id, token);
 
         if (cancelled) return;
         setCurrentFight(save.currentFight);
@@ -109,10 +111,13 @@ export function useBattle() {
         appendMessage("system", "You were defeated!\nStarting on floor 1 again.");
         setTimeout(async () => {
           if (userId) {
-            await Promise.all([
-              battleService.resetSave(userId),
-              clearUserItems(userId),
-            ]);
+            const token = await getToken();
+            if (token) {
+              await Promise.all([
+                battleService.resetSave(token),
+                clearUserItems(userId),
+              ]);
+            }
           }
           navigate("/battle", { replace: true, state: { resetKey: Date.now() } });
         }, DEFEAT_DELAY_MS);

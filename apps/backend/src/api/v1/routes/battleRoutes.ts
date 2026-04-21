@@ -4,7 +4,7 @@ import { findOrCreateUser } from "../middleware/findOrCreateUser.js";
 
 const router = Router();
 
-router.post("/start", controller.startBattle);
+router.post("/start", findOrCreateUser, controller.startBattle);
 router.post("/:id/action", controller.playerAction);
 
 export default router;
