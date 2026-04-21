@@ -1,13 +1,13 @@
 import BattleLog from "./Battlelog";
 import MovesPanel from "./MovesPanel";
 import { useBattle } from "../../../hooks/useBattle";
-import { useUser } from "../../common/usercontext/UserContext";
+import { useUser } from "@clerk/clerk-react";
 import "./BattleScreen.css";
-
+ 
 const ALLY_IMAGE = "/images/ally/player.png";
  
 function BattleScreen() {
-    const { username } = useUser();
+    const { user } = useUser();
     const {
         enemy,
         playerHp,
@@ -25,7 +25,7 @@ function BattleScreen() {
  
     // Get the last message for action description
     const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
-
+ 
     const maxEnemyHp = enemy?.maxHp ?? 1;
     const enemyHpPct = Math.max(0, Math.round((enemyHp / maxEnemyHp) * 100));
     const playerHpPct = Math.max(0, playerHp);
@@ -51,14 +51,14 @@ function BattleScreen() {
                 {/* Ally side */}
                 <div className="ally-side">
                     <div className="combatant-container">
-                        <img src={ALLY_IMAGE} alt={username ?? "Ally"} className="ally-sprite" />
-                        <div className="combatant-name">{username ?? "Ally"}</div>
+                        <img src={ALLY_IMAGE} alt={user?.username ?? "Ally"} className="ally-sprite" />
+                        <div className="combatant-name">{user?.username ?? "Ally"}</div>
                         <div className="health-bar-container">
                             <div className="health-bar-fill" style={{ width: `${playerHpPct}%` }} />
                         </div>
                     </div>
                 </div>
-
+ 
                 {/* Enemy side */}
                 <div className="enemy-side">
                     <div className="combatant-container">

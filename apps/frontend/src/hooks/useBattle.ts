@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 import type { BattleLogMessage } from "../types/BattleLogMessage";
 import type { Item } from "../types/items";
 import * as battleService from "../services/battleService";
 import type { Battle, Enemy, ActiveBuff } from "../services/battleService";
-import { useUser } from "../components/common/usercontext/UserContext";
 import { clearUserItems, getUserItems, removeUserItem } from "../apis/itemApi";
 
 const DEFEAT_DELAY_MS = 5000;
@@ -14,7 +14,7 @@ function nextId() { return _msgIdCounter++; }
 
 export function useBattle() {
   const navigate = useNavigate();
-  const { userId } = useUser();
+  const { userId } = useAuth();
 
   const [enemy, setEnemy] = useState<Enemy | null>(null);
   const [battle, setBattle] = useState<Battle | null>(null);

@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
+import { clerkMiddleware } from "@clerk/express";
 import corsOptions from "../config/cors.js";
 import authRoutes from "./api/v1/routes/authRoutes.js";
 import battleLogRoutes from "./api/v1/routes/battleLogRoutes.js";
@@ -13,6 +14,9 @@ const app = express();
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// Add Clerk middleware - authenticates users via session tokens
+app.use(clerkMiddleware());
 
 app.get("/", (_req, res) => {
   res.status(200).json({ status: "ok", service: "backend" });
