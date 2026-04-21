@@ -10,11 +10,9 @@ datasource db {
   url      = env("DB_URL")
 }
 
+// Clerk manages auth - this model only tracks app-specific user data
 model User {
-  id             String             @id @default(uuid())
-  username       String             @unique
-  email          String             @unique
-  password       String
+  id             String             @id
   items          UserItem[]
   battleMessages BattleLogMessage[]
   battles        Battle[]
@@ -27,19 +25,17 @@ model Item {
   users UserItem[]
 }
 
-// Join table linking users to the items they own
 model UserItem {
   userId String
   itemId Int
   user   User   @relation(fields: [userId], references: [id])
   item   Item   @relation(fields: [itemId], references: [id])
-
   @@id([userId, itemId])
 }
 
 model BattleLogMessage {
   id        Int      @id @default(autoincrement())
-  type      String   // "system", "ally", or "enemy"
+  type      String
   text      String
   timestamp DateTime @default(now())
   userId    String?
