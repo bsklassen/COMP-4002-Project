@@ -47,22 +47,22 @@
 }
  
 .enemy-placeholder {
-    width: 120px;
-    height: 120px;
-    background: #666;
+    max-height: 40%;
+    max-width: 30%;
+    width: auto;
+    object-fit: contain;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid #333;
     font-size: 48px;
     color: white;
 }
  
 .ally-sprite {
-    width: 120px;
-    height: 120px;
-    background: #888;
-    border: 2px solid #333;
+    max-height: 50%;
+    max-width: 35%;
+    width: auto;
+    object-fit: contain;
     display: flex;
     align-items: center;
     justify-content: center;
