@@ -9,14 +9,16 @@
  
 /* ── TOP HALF: battle area ── */
 .battle-area {
-    flex: 1;
+     flex: 1;
     display: flex;
     min-height: 0;
+    background-image: url('/images/backgrounds/forest-battleground-cropped.png');
+    background-size: 100%;
+    background-position: center;
 }
  
 .enemy-side {
     flex: 1;
-    background: linear-gradient(to bottom, #8b6f47, #d4a574);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -25,7 +27,6 @@
  
 .ally-side {
     flex: 1;
-    background: linear-gradient(to bottom, #8b6f47, #d4a574);
     display: flex;
     justify-content: center;
     align-items: center;

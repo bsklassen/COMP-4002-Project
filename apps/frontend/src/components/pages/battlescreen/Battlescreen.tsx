@@ -4,7 +4,7 @@ import { useBattle } from "../../../hooks/useBattle";
 import { useUser } from "../../common/usercontext/UserContext";
 import "./BattleScreen.css";
 
-const ALLY_IMAGE = "/images/hero/the_nobody.png";
+const ALLY_IMAGE = "/images/heros/the_nobody.png";
  
 function BattleScreen() {
     const { username } = useUser();
