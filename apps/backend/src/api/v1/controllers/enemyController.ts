@@ -1,7 +1,7 @@
 import * as enemyService from "../services/enemyService.js";
 import type { Request, Response, NextFunction } from "express";
 
-export async function getAllEnemies(req: Request, res: Response, next: NextFunction) {
+export async function getAllEnemies(_req: Request, res: Response, next: NextFunction) {
   try {
     const enemies = await enemyService.getAllEnemies();
     res.json(enemies);

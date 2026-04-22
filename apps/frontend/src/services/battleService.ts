@@ -51,10 +51,13 @@ export type UserSave = {
   currentFight: number;
 };
 
-export async function startBattle(enemyId: number, userId: string): Promise<Battle> {
+export async function startBattle(enemyId: number, token: string): Promise<Battle> {
   const res = await fetch(`${API_BASE}/api/v1/battles/start`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", "x-user-id": userId },
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
     body: JSON.stringify({ enemyId }),
   });
   if (!res.ok) throw new Error(`startBattle failed: ${res.status}`);
@@ -74,26 +77,32 @@ export async function playerAction(
   return res.json();
 }
 
-export async function getUserSave(userId: string): Promise<UserSave> {
+export async function getUserSave(token: string): Promise<UserSave> {
   const res = await fetch(`${API_BASE}/api/v1/save`, {
-    headers: { "x-user-id": userId },
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
   });
   if (!res.ok) throw new Error(`getUserSave failed: ${res.status}`);
   return res.json();
 }
 
-export async function advanceFight(userId: string): Promise<void> {
+export async function advanceFight(token: string): Promise<void> {
   const res = await fetch(`${API_BASE}/api/v1/save/advance`, {
     method: "POST",
-    headers: { "x-user-id": userId },
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
   });
   if (!res.ok) throw new Error(`advanceFight failed: ${res.status}`);
 }
 
-export async function resetSave(userId: string): Promise<void> {
+export async function resetSave(token: string): Promise<void> {
   const res = await fetch(`${API_BASE}/api/v1/save/reset`, {
     method: "POST",
-    headers: { "x-user-id": userId },
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
   });
   if (!res.ok) throw new Error(`resetSave failed: ${res.status}`);
 }

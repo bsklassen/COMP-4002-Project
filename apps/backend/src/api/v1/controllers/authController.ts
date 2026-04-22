@@ -22,7 +22,7 @@ export async function register(req: Request, res: Response, next: NextFunction) 
   }
 }
 
-export async function getUsers(req: Request, res: Response, next: NextFunction) {
+export async function getUsers(_req: Request, res: Response, next: NextFunction) {
   try {
     const users = await authService.getSavedUsers();
     res.json(users);

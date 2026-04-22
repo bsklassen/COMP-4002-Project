@@ -32,7 +32,14 @@ class UserRepository {
     if (!this.useDatabase) {
       return structuredClone(this.users).sort((a, b) => a.username.localeCompare(b.username));
     }
-    return prisma.user.findMany({ orderBy: { username: "asc" } });
+
+    const rows = await prisma.user.findMany({ orderBy: { id: "asc" } });
+    return rows.map((row) => ({
+      id: row.id,
+      username: row.id,
+      email: "",
+      password: "",
+    }));
   }
 
   async getById(id: string): Promise<User | null> {
@@ -41,7 +48,16 @@ class UserRepository {
       const found = this.users.find((u) => u.id === id) ?? null;
       return found ? { ...found } : null;
     }
-    return prisma.user.findUnique({ where: { id } });
+
+    const row = await prisma.user.findUnique({ where: { id } });
+    if (!row) return null;
+
+    return {
+      id: row.id,
+      username: row.id,
+      email: "",
+      password: "",
+    };
   }
 
   async create(newUser: NewUser): Promise<User> {
@@ -54,7 +70,16 @@ class UserRepository {
       this.users.push(created);
       return { ...created };
     }
-    return prisma.user.create({ data: newUser });
+
+    const id = crypto.randomUUID?.() ?? `id_${Date.now()}`;
+    const created = await prisma.user.create({ data: { id } });
+
+    return {
+      id: created.id,
+      username: newUser.username,
+      email: newUser.email,
+      password: newUser.password,
+    };
   }
 
   async delete(id: string): Promise<boolean> {
