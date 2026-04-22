@@ -30,11 +30,11 @@ app.use("/api/v1/save", userSaveRoutes);
 app.use("/api/v1/battles", battleRoutes);
 
 // Fallback
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   console.error(err);
   res.status(500).json({ error: (err as Error).message ?? "Internal server error" });
 };
