@@ -42,7 +42,7 @@ function BattleScreen() {
                         </span>
                     ))}
                 </div>
-                <span>Floor {currentFight}</span>
+                <span>Floor {currentFight} &nbsp;|&nbsp; Items: {inventory.length}</span>
             </div>
  
             {/* ── TOP HALF: battle area ── */}
