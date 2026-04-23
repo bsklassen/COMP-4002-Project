@@ -72,16 +72,19 @@ function BattleComplete() {
                             })
                         }
                     </ul>
-                    <p>Select the ones you'd like to discard.</p>
+                    {!itemsKept && (
+                        <p>Select the ones you'd like to discard.</p>
+                    )}
                     <br></br>
-                    <button onClick={() =>{
-                        setDiscardConfirmation(true)
-                        // useless variable for fixing vercel deployment
-                        let uselessVar = itemsDiscarded
-                        uselessVar = uselessVar
-                    }}>
-                        Discard Items
-                    </button>
+                    {!discardConfirmation && !itemsKept && (
+                        <button onClick={() =>{
+                            setDiscardConfirmation(true)
+                            let uselessVar = itemsDiscarded
+                            uselessVar = uselessVar
+                        }}>
+                            Discard Items
+                        </button>
+                    )}
                     {discardConfirmation && (
                         <div>
                             <h3>Are you sure you want to discard these items?</h3>
