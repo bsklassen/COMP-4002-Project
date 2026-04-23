@@ -54,8 +54,8 @@ export const USER_ITEMS = [
 export const ENEMIES = [
   {
     id: 1,
-    name: "Ignar, the Ashen Fist",
-    imagePath: "/images/enemies/magma-knight.png",
+    name: "Magma Knight",
+    imagePath: "/images/enemies/magma_knight.png",
     maxHp: 195,
     atk: 52,
     def: 10,
@@ -67,8 +67,8 @@ export const ENEMIES = [
   },
   {
     id: 2,
-    name: "Seraphelle, the Veilweaver",
-    imagePath: "/images/enemies/mage-female.png",
+    name: "Shadow of a Forsaken Soul",
+    imagePath: "/images/enemies/shadow_of_a_forsaken_soul.png",
     maxHp: 195,
     atk: 52,
     def: 10,
@@ -80,8 +80,8 @@ export const ENEMIES = [
   },
   {
     id: 3,
-    name: "Warden Kael, the Unbroken",
-    imagePath: "/images/enemies/prison-guard.png",
+    name: "Spike Fiend",
+    imagePath: "/images/enemies/spike_fiend.png",
     maxHp: 195,
     atk: 52,
     def: 10,
