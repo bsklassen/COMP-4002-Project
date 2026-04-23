@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "ts-node": {
     "esm": true,
     "experimentalResolver": true,
@@ -15,7 +15,19 @@
     "allowSyntheticDefaultImports": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
-    "types": ["node"]
+    "skipLibCheck": true,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "./src/types",
+      "../../node_modules/@types"
+    ]
   },
-  "include": ["api/**/*.ts", "src/**/*.ts", "config/**/*.ts", "prisma/**/*.ts"]
+  "include": [
+    "api/**/*.ts",
+    "src/**/*.ts",
+    "config/**/*.ts",
+    "prisma/**/*.ts"
+  ]
 }

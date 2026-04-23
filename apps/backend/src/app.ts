@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
+import { clerkMiddleware } from "@clerk/express";
 import corsOptions from "../config/cors.js";
 import authRoutes from "./api/v1/routes/authRoutes.js";
 import battleLogRoutes from "./api/v1/routes/battleLogRoutes.js";
@@ -14,6 +15,9 @@ const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Add Clerk middleware - authenticates users via session tokens
+app.use(clerkMiddleware());
+
 app.get("/", (_req, res) => {
   res.status(200).json({ status: "ok", service: "backend" });
 });
@@ -26,11 +30,11 @@ app.use("/api/v1/save", userSaveRoutes);
 app.use("/api/v1/battles", battleRoutes);
 
 // Fallback
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   console.error(err);
   res.status(500).json({ error: (err as Error).message ?? "Internal server error" });
 };

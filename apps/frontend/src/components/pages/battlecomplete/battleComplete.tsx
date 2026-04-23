@@ -1,16 +1,16 @@
 import './battleComplete.css'
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from "@clerk/clerk-react";
 import { useDroppedItems } from "../../../hooks/useDroppedItems";
 import { advanceFight } from '../../../services/battleService';
 import { removeUserItem } from '../../../apis/itemApi';
-import { useUser } from '../../common/usercontext/UserContext';
 
 function BattleComplete() {
     // placeholder data
     const navigate = useNavigate();
     const location = useLocation();
-    const { userId } = useUser();
+    const { userId, getToken } = useAuth();
     const enemyName = (location.state as { enemyName?: string } | null)?.enemyName ?? "Enemy";
     const experienceGained = 150
     const goldEarned = 312980
@@ -26,8 +26,15 @@ function BattleComplete() {
     }
 
     useEffect(() => {
-        if (userId) void advanceFight(userId);
-    }, [userId]);
+        async function advance() {
+            if (!userId) return;
+            const token = await getToken();
+            if (!token) return;
+            await advanceFight(token);
+        }
+
+        void advance();
+    }, [userId, getToken]);
     
     return(
         <div className="postBattleOverlay">
