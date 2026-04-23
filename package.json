@@ -23,6 +23,7 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.61.5",
     "@clerk/express": "^2.1.5",
+    "cors": "^2.8.6",
     "dotenv": "^16.4.7"
   }
 }

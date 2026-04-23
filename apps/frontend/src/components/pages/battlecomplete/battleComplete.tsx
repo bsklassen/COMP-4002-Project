@@ -38,8 +38,19 @@ function BattleComplete() {
     
     return(
         <div className="postBattleOverlay">
+                                        
             <div className="postBattleModal">
                 {/* <h1>{victoryAchieved ? "VICTORY!" : "DEFEAT"}</h1> */}
+                {/*border - i realize now i should make a component for this - will do if i have time*/ }
+                <img src="/images/assets/borders/tl-border-32px.png" alt="" style={{position:'absolute', top: 0, left: 0, width: 32, height: 32, imageRendering: 'pixelated'}} />
+                <img src="/images/assets/borders/tr-border-32px.png" alt="" style={{position:'absolute', top: 0, right: 0, width: 32, height: 32, imageRendering: 'pixelated'}} />
+                <img src="/images/assets/borders/bl-border-32px.png" alt="" style={{position:'absolute', bottom: 0, left: 0, width: 32, height: 32, imageRendering: 'pixelated'}} />
+                <img src="/images/assets/borders/br-border-32px.png" alt="" style={{position:'absolute', bottom: 0, right: 0, width: 32, height: 32, imageRendering: 'pixelated'}} />
+
+                <div style={{position:'absolute', top: 0, left: 32, right: 32, height: 32, backgroundImage: "url('/images/assets/borders/top-border-32px.png')", backgroundRepeat: 'repeat-x', backgroundSize: '32px 32px', imageRendering: 'pixelated'}} />
+                <div style={{position:'absolute', bottom: 0, left: 32, right: 32, height: 32, backgroundImage: "url('/images/assets/borders/bot-border-32px.png')", backgroundRepeat: 'repeat-x', backgroundSize: '32px 32px', imageRendering: 'pixelated'}} />
+                <div style={{position:'absolute', left: 0, top: 32, bottom: 32, width: 32, backgroundImage: "url('/images/assets/borders/left-border-32px.png')", backgroundRepeat: 'repeat-y', backgroundSize: '32px 32px', imageRendering: 'pixelated'}} />
+                <div style={{position:'absolute', right: 0, top: 32, bottom: 32, width: 32, backgroundImage: "url('/images/assets/borders/right-border-32px.png')", backgroundRepeat: 'repeat-y', backgroundSize: '32px 32px', imageRendering: 'pixelated'}} />
                 <h1>VICTORY!</h1>
                 <p>You defeated {enemyName}!</p>
                 <p>Experience gained: {experienceGained}</p>
@@ -68,16 +79,19 @@ function BattleComplete() {
                             })
                         }
                     </ul>
-                    <p>Select the ones you'd like to discard.</p>
+                    {!itemsKept && (
+                        <p>Select the ones you'd like to discard.</p>
+                    )}
                     <br></br>
-                    <button onClick={() =>{
-                        setDiscardConfirmation(true)
-                        // useless variable for fixing vercel deployment
-                        let uselessVar = itemsDiscarded
-                        uselessVar = uselessVar
-                    }}>
-                        Discard Items
-                    </button>
+                    {!discardConfirmation && !itemsKept && (
+                        <button onClick={() =>{
+                            setDiscardConfirmation(true)
+                            let uselessVar = itemsDiscarded
+                            uselessVar = uselessVar
+                        }}>
+                            Discard Items
+                        </button>
+                    )}
                     {discardConfirmation && (
                         <div>
                             <h3>Are you sure you want to discard these items?</h3>
