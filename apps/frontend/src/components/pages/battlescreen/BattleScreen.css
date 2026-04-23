@@ -1,10 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 .battle-screen {
+    position: relative;
+    padding: 7px;
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    background: #2a2a2a;
-    overflow: hidden;
+    background: #0a0e1a;
+
 }
  
 /* ── TOP HALF: battle area ── */
@@ -41,10 +44,12 @@
 }
  
 .combatant-name {
-    color: white;
+    color: #c8d8f0;
     font-weight: bold;
     font-size: 14px;
     text-shadow: 1px 1px 2px #000;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
 }
  
 .enemy-placeholder {
@@ -92,7 +97,7 @@
     flex: 1;
     display: flex;
     min-height: 0;
-    border-top: 4px solid #666;
+    border-top: 4px solid #2a4a7f;
 }
  
 /* 2x2 button grid */
@@ -103,7 +108,7 @@
     grid-template-rows: auto auto;
     gap: 8px;
     padding: 12px;
-    background: #1e2a3a;
+    background: #0d1527;
     border-right: 2px solid #2a3a4a;
     justify-content: center;
     align-content: center;
@@ -112,12 +117,13 @@
 .move-button {
     width: 200px;
     height: 100px;
+    font-family: 'Press Start 2P', cursive;
     background-image: url('/images/assets/action-button.png');
     background-size: 100%;
-    color: #efe3c7;
+    color: #c8d8f0;
     border: none;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 10px;
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -139,8 +145,9 @@
  
 .action-desc {
     flex: 1;
-    background: #222;
+    background: #0d1527;
     border-right: 2px solid #666;
+    font-family: 'Press Start 2P', cursive;
     padding: 10px;
     color: #ccc;
     font-size: 14px;
@@ -148,11 +155,16 @@
     display: flex;
     align-items: flex-start;
 }
+
+.action-desc p {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px
+}
  
 /* Battle Log */
 .battle-log {
     flex: 1;
-    background: #2a2a2a;
+    background:  #0a0e1a;
     padding: 10px;
     overflow-y: auto;
     display: flex;
@@ -165,27 +177,29 @@
     border-radius: 3px;
     font-size: 13px;
     line-height: 1.4;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
 }
  
 .log-system {
-    background: #4a4a4a;
-    color: #ffeb3b;
-    border-left: 3px solid #ffeb3b;
+    background: #111c33;
+    color:  #46cfb3;
+    border-left: 3px solid  #46cfb3;
 }
  
 .log-ally {
-    background: #1b5e20;
-    color: #a5d6a7;
-    border-left: 3px solid #4caf50;
+    background: #0d2626;
+    color: #31b0b0;
+    border-left: 3px solid #31b0b0;
 }
  
 .log-enemy {
-    background: #b71c1c;
-    color: #ffcdd2;
-    border-left: 3px solid #f44336;
+    background: #2a0d1a;
+    color: #b04a6e;
+    border-left: 3px solid #b04a6e;
 }
  
 .error {
-    color: #f44336;
+    color: #b04a6e;
     padding: 5px;
 }

@@ -32,7 +32,19 @@ function BattleScreen() {
  
     return (
         <div className="battle-screen">
- 
+
+            {/*Border styling*/}
+            <img src="/images/assets/borders/tl-border-32px.png" alt="" style={{position:'absolute', top: 0, left: 0, width: 32, height: 32, imageRendering: 'pixelated'}} />
+            <img src="/images/assets/borders/tr-border-32px.png" alt="" style={{position:'absolute', top: 0, right: 0, width: 32, height: 32, imageRendering: 'pixelated'}} />
+            <img src="/images/assets/borders/bl-border-32px.png" alt="" style={{position:'absolute', bottom: 0, left: 0, width: 32, height: 32, imageRendering: 'pixelated'}} />
+            <img src="/images/assets/borders/br-border-32px.png" alt="" style={{position:'absolute', bottom: 0, right: 0, width: 32, height: 32, imageRendering: 'pixelated'}} />
+
+            <div style={{position:'absolute', top: 0, left: 32, right: 32, height: 32, backgroundImage: "url('/images/assets/borders/top-border-32px.png')", backgroundRepeat: 'repeat-x', backgroundSize: '32px 32px', imageRendering: 'pixelated'}} />
+            <div style={{position:'absolute', bottom: 0, left: 32, right: 32, height: 32, backgroundImage: "url('/images/assets/borders/bot-border-32px.png')", backgroundRepeat: 'repeat-x', backgroundSize: '32px 32px', imageRendering: 'pixelated'}} />
+            <div style={{position:'absolute', left: 0, top: 32, bottom: 32, width: 32, backgroundImage: "url('/images/assets/borders/left-border-32px.png')", backgroundRepeat: 'repeat-y', backgroundSize: '32px 32px', imageRendering: 'pixelated'}} />
+            <div style={{position:'absolute', right: 0, top: 32, bottom: 32, width: 32, backgroundImage: "url('/images/assets/borders/right-border-32px.png')", backgroundRepeat: 'repeat-y', backgroundSize: '32px 32px', imageRendering: 'pixelated'}} />
+                                    
+
             {/* Floor counter + active buffs */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.25rem 0.75rem", background: "#1a1a1a", color: "#f5deb3", fontWeight: "bold", fontSize: "0.85rem" }}>
                 <div style={{ display: "flex", gap: "0.5rem" }}>
