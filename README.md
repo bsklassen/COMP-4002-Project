@@ -32,7 +32,16 @@ FRONTEND_URL=http://localhost:5173
 DB_URL=postgresql://postgres:your_password@localhost:5433/comp4002
 ```
 
-4. Run the application: 
+4. set up a local database:
+
+Create a new database called 'comp4002' and then navigate to `apps/backend`. Then, run:
+
+```
+npx prisma migrate deploy
+npx prisma db seed
+```
+
+5. Run the application: 
 
 in the terminal, type `npm run dev`
 
