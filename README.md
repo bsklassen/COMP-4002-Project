@@ -1,85 +1,43 @@
-# COMP 4002 Project
+![Logo](apps/frontend/public/images/assets/logo.png)
 
-## Project Team 
-- Ben Klassen
-- Rahman Hajiserdar
-- Lilly Adamo
+## The Gauntlet of Night
 
-## Project General Description Section
-- As a user, I want to play a turned based videogame, so I can enjoy a brainteaser.
-- As a user, I want to know the amount of time it took to beat the game so I can have bragging rights.
-- As a user, I want to grind and level up my character so I can feel a sense of accomplishment when I defeat higher level enemies and bosses.
+A turn based fighting game created by Ben Klassen, Rahman Hajiserdar, and Lilly Adamo
 
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Local Setup 
 
-Currently, two official plugins are available:
+Please note that you will need to install node.js before playing!
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Clone the repository
 
-## React Compiler
+2. install dependencies from the project root with `npm i` 
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+3. Set up environment variables:
 
-## Expanding the ESLint configuration
+in `apps/frontend/.env`:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+VITE_API_BASE_URL=http://localhost:3000
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+in `apps/backend/.env`:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+CLERK_SECRET_KEY=your_clerk_secret_key
+CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+PORT=3000
+FRONTEND_URL=http://localhost:5173
+DB_URL=postgresql://postgres:your_password@localhost:5433/comp4002
+```
+
+4. Run the application: 
+
+in the terminal, type `npm run dev`
+
+voila! your game will now be available at `http://localhost:5173`
+
+Please make an account at clerk.com, then copy your API keys into the env files above.
+
+Good luck, weary traveller. 
