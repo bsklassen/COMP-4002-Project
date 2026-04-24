@@ -62,7 +62,7 @@ export function useBattle() {
 
         // Load inventory in parallel — non-fatal if it fails
         try {
-          const items = await getUserItems(userId);
+          const items = await getUserItems(token);
           if (!cancelled) setInventory(items);
         } catch { /* inventory unavailable */ }
       } catch (err) {
