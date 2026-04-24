@@ -21,6 +21,7 @@ function BattleScreen() {
         inventory,
         submitAction,
         usePotion,
+        sessionWins,
     } = useBattle();
  
     // Get the last message for action description
@@ -54,7 +55,7 @@ function BattleScreen() {
                         </span>
                     ))}
                 </div>
-                <span>Floor {currentFight} &nbsp;|&nbsp; Items: {inventory.length}</span>
+                <span>Floor {currentFight} &nbsp;|&nbsp; Items: {inventory.length} &nbsp;|&nbsp; Session Wins: {sessionWins}</span>
             </div>
  
             {/* ── TOP HALF: battle area ── */}
