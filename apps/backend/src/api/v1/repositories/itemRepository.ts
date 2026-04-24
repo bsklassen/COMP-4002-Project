@@ -46,6 +46,41 @@ class ItemRepository {
         const result = await prisma.userItem.deleteMany({ where: {itemId: id }});
         return result.count >0;
     }
+
+    async clearUserItems(userId: string): Promise<void> {
+        if (!this.useDatabase) return; // in-memory has no per-user items
+        await prisma.userItem.deleteMany({ where: { userId } });
+    }
+
+    async getUserItems(userId: string): Promise<Item[]> {
+        await this.ensureSeeded();
+        if (!this.useDatabase) return [];
+        const userItems = await prisma.userItem.findMany({
+            where: { userId },
+            include: { item: true },
+        });
+        return userItems.map((ui) => ui.item);
+    }
+
+    async removeUserItem(userId: string, itemId: number): Promise<boolean> {
+        if (!this.useDatabase) return false;
+        // Only delete one row (user may have multiple of same item in future)
+        const existing = await prisma.userItem.findFirst({ where: { userId, itemId } });
+        if (!existing) return false;
+        await prisma.userItem.delete({ where: { userId_itemId: { userId, itemId } } });
+        return true;
+    }
+
+    async grantItems(userId: string, itemIds: number[]): Promise<void> {
+        if (!this.useDatabase) return;
+        for (const itemId of itemIds) {
+            await prisma.userItem.upsert({
+                where: { userId_itemId: { userId, itemId } },
+                create: { userId, itemId },
+                update: {},
+            });
+        }
+    }
 }
 
 export const itemRepository = new ItemRepository()

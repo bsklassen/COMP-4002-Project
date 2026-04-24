@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SavedLogins from "./SavedLogins";
 import { useUser } from "../../common/usercontext/UserContext";
 import useAuth from "../../../hooks/useAuth";
@@ -6,6 +7,7 @@ import "./Login.css";
 
 
 function Login() {
+  const navigate = useNavigate();
   const { setUsername: setGlobalUsername, setUserId } = useUser();
   const { savedUsers, login: authLogin, signup: authSignup, remove: authRemove } = useAuth();
   const [signup, setSignup] = useState(false);
@@ -58,7 +60,7 @@ function Login() {
           setUserId(user.id);
           /* Rahman */
           setSuccessMessage("Login successful!");
-          setTimeout(() => setSuccessMessage(""), 2000);
+          setTimeout(() => navigate("/battle"), 500);
         } else {
           setSuccessMessage("Invalid credentials!");
           setTimeout(() => setSuccessMessage(""), 3000);

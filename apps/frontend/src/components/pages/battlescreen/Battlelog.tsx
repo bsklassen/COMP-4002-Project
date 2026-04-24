@@ -24,6 +24,7 @@ function BattleLog({ messages }: BattleLogProps) {
                 <div 
                     key={message.id} 
                     className={`log-message log-${message.type}`}
+                    style={{ whiteSpace: "pre-line" }}
                 >
                     {message.text}
                 </div>
