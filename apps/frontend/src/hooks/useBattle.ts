@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import type { BattleLogMessage } from "../types/BattleLogMessage";
@@ -8,6 +8,7 @@ import type { Battle, Enemy, ActiveBuff } from "../services/battleService";
 import { clearUserItems, getUserItems, removeUserItem } from "../apis/itemApi";
 
 const DEFEAT_DELAY_MS = 5000;
+const SESSION_WINS_STORAGE_PREFIX = "battleSessionWins";
 
 let _msgIdCounter = 1;
 function nextId() { return _msgIdCounter++; }
@@ -15,6 +16,7 @@ function nextId() { return _msgIdCounter++; }
 export function useBattle() {
   const navigate = useNavigate();
   const { userId, getToken } = useAuth();
+  const storageKey = userId ? `${SESSION_WINS_STORAGE_PREFIX}:${userId}` : null;
 
   const [enemy, setEnemy] = useState<Enemy | null>(null);
   const [battle, setBattle] = useState<Battle | null>(null);
@@ -28,6 +30,19 @@ export function useBattle() {
   const [currentFight, setCurrentFight] = useState(1);
   const [activeBuffs, setActiveBuffs] = useState<ActiveBuff[]>([]);
   const [inventory, setInventory] = useState<Item[]>([]);
+  const [sessionWins, setSessionWins] = useState(0);
+  const sessionStartFightRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!storageKey) {
+      setSessionWins(0);
+      return;
+    }
+
+    const stored = sessionStorage.getItem(storageKey);
+    const parsed = stored === null ? 0 : Number.parseInt(stored, 10);
+    setSessionWins(Number.isNaN(parsed) ? 0 : parsed);
+  }, [storageKey]);
 
   function appendMessage(type: BattleLogMessage["type"], text: string) {
     setMessages((prev) => [
@@ -50,6 +65,9 @@ export function useBattle() {
         const loadedBattle = await battleService.startBattle(loadedEnemy.id, token);
 
         if (cancelled) return;
+                if (sessionStartFightRef.current === null) {
+                  sessionStartFightRef.current = save.currentFight;
+                }
         setCurrentFight(save.currentFight);
         setEnemy(loadedEnemy);
         setBattle(loadedBattle);
@@ -62,7 +80,7 @@ export function useBattle() {
 
         // Load inventory in parallel — non-fatal if it fails
         try {
-          const items = await getUserItems(token);
+          const items = await getUserItems(userId);
           if (!cancelled) setInventory(items);
         } catch { /* inventory unavailable */ }
       } catch (err) {
@@ -104,6 +122,13 @@ export function useBattle() {
       if (result.playerWon) {
         const defeatedName = enemy?.name ?? "Enemy";
         appendMessage("system", `You defeated ${defeatedName}!\nMoving to the next floor...`);
+        setSessionWins((prev) => {
+          const next = prev + 1;
+          if (storageKey) {
+            sessionStorage.setItem(storageKey, String(next));
+          }
+          return next;
+        });
         setTimeout(() => {
           navigate("/victory", { state: { enemyName: defeatedName } });
         }, DEFEAT_DELAY_MS);
@@ -119,6 +144,10 @@ export function useBattle() {
               ]);
             }
           }
+          if (storageKey) {
+            sessionStorage.removeItem(storageKey);
+          }
+          setSessionWins(0);
           navigate("/battle", { replace: true, state: { resetKey: Date.now() } });
         }, DEFEAT_DELAY_MS);
       }
@@ -187,5 +216,6 @@ export function useBattle() {
     inventory,
     submitAction,
     usePotion,
+    sessionWins,
   };
 }

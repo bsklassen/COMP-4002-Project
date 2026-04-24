@@ -53,7 +53,7 @@ export const getUserItems = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const userId = (req as any).userId as string | undefined;
+        const userId = ((req as any).user?.id ?? req.headers["x-user-id"]) as string | undefined;
         if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
         const items = await itemService.getUserItems(userId);
         res.status(200).json(successResponse(items, "User items retrieved"));

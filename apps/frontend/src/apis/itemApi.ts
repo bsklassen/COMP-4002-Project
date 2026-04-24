@@ -27,9 +27,9 @@ export async function clearUserItems(userId: string): Promise<void> {
   if (!res.ok) throw new Error(`clearUserItems failed: ${res.status}`);
 }
 
-export async function getUserItems(token: string): Promise<Item[]> {
+export async function getUserItems(userId: string): Promise<Item[]> {
   const res = await fetch(`${ITEM_ENDPOINT}/inventory`, {
-    headers: { "Authorization": `Bearer ${token}` },
+    headers: { "x-user-id": userId },
   });
   if (!res.ok) throw new Error(`getUserItems failed: ${res.status}`);
   const json = await res.json();
