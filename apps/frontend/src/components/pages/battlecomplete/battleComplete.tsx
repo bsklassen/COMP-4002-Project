@@ -2,12 +2,14 @@ import './battleComplete.css'
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 import { useDroppedItems } from "../../../hooks/useDroppedItems";
 import { advanceFight } from '../../../services/battleService';
 import { removeUserItem } from '../../../apis/itemApi';
 
 function BattleComplete() {
     // placeholder data
+    const { user } = useUser();
     const navigate = useNavigate();
     const location = useLocation();
     const { userId, getToken } = useAuth();
@@ -35,7 +37,6 @@ function BattleComplete() {
 
         void advance();
     }, [userId, getToken]);
-    
     return(
         <div className="postBattleOverlay">
                                         
@@ -52,6 +53,7 @@ function BattleComplete() {
                 <div style={{position:'absolute', left: 0, top: 32, bottom: 32, width: 32, backgroundImage: "url('/images/assets/borders/left-border-32px.png')", backgroundRepeat: 'repeat-y', backgroundSize: '32px 32px', imageRendering: 'pixelated'}} />
                 <div style={{position:'absolute', right: 0, top: 32, bottom: 32, width: 32, backgroundImage: "url('/images/assets/borders/right-border-32px.png')", backgroundRepeat: 'repeat-y', backgroundSize: '32px 32px', imageRendering: 'pixelated'}} />
                 <h1>VICTORY!</h1>
+                <p>Well done, {user?.emailAddresses[0]?.emailAddress.split('@')[0]}!</p>
                 <p>You defeated {enemyName}!</p>
                 <p>Experience gained: {experienceGained}</p>
                 <p>Gold Earned: {goldEarned}</p>
